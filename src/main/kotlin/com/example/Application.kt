@@ -1,13 +1,20 @@
 package com.example
 
-import io.ktor.server.engine.*
+import com.example.db.DatabaseFactory.initDatabase
+import io.ktor.application.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import io.ktor.server.netty.*
-import com.example.plugins.*
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-        configureRouting()
-        configureSerialization()
-        configureDatabase()
-    }.start(wait = true)
+fun main(args: Array<String>): Unit = EngineMain.main(args)
+
+fun Application.module() {
+    initDatabase()
+
+    routing {
+        get("/") {
+            call.respondText("Hi!")
+        }
+    }
 }
+

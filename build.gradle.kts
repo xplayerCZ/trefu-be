@@ -34,4 +34,6 @@ dependencies {
 
     implementation("org.postgresql:postgresql:42.3.1")
     implementation("com.zaxxer:HikariCP:5.0.0")
+
+    implementation("org.flywaydb:flyway-core:8.2.3")
 }

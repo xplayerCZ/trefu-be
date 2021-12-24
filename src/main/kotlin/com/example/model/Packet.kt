@@ -1,7 +1,8 @@
-package com.example.data.packet
+package com.example.model
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.jodatime.date
+import org.joda.time.LocalDate
 
 object Packets : Table() {
     val id = integer("id").autoIncrement()
@@ -11,3 +12,10 @@ object Packets : Table() {
 
     override val primaryKey = PrimaryKey(id, name = "PK_Packets_ID")
 }
+
+data class Packet(
+    val id: Int?,
+    val from: LocalDate,
+    val to: LocalDate,
+    val valid: Boolean
+)

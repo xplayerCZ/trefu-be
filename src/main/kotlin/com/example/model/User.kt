@@ -1,4 +1,4 @@
-package com.example.data.user
+package com.example.model
 
 import org.jetbrains.exposed.sql.Table
 
@@ -10,3 +10,10 @@ object Users : Table() {
 
     override val primaryKey = PrimaryKey(id, name = "PK_Users_ID")
 }
+
+data class User(
+    val id: Int?,
+    val firstName: String,
+    val lastName: String,
+    val age: Int
+)
