@@ -1,4 +1,4 @@
-package com.example.db
+package cz.davidkurzica.service
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -43,6 +43,5 @@ object DatabaseFactory {
 
     suspend fun <T> dbQuery(
         block: suspend () -> T
-    ): T =
-        newSuspendedTransaction { block() }
+    ): T = newSuspendedTransaction { block() }
 }

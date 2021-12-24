@@ -1,7 +1,8 @@
-package com.example.service
+package cz.davidkurzica.service
 
-import com.example.db.DatabaseFactory.dbQuery
-import com.example.model.*
+import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.model.Packet
+import cz.davidkurzica.model.Packets
 import org.jetbrains.exposed.sql.*
 import org.joda.time.DateTime
 import org.joda.time.LocalDate

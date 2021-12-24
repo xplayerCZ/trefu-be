@@ -1,7 +1,8 @@
-package com.example.service
+package cz.davidkurzica.service
 
-import com.example.db.DatabaseFactory.dbQuery
-import com.example.model.*
+import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.model.User
+import cz.davidkurzica.model.Users
 import org.jetbrains.exposed.sql.*
 
 class UserService {

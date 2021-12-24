@@ -1,8 +1,8 @@
-package com.example.service
+package cz.davidkurzica.service
 
-import com.example.db.DatabaseFactory.dbQuery
-import com.example.model.Line
-import com.example.model.Lines
+import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.model.Line
+import cz.davidkurzica.model.Lines
 import org.jetbrains.exposed.sql.*
 
 class LineService {

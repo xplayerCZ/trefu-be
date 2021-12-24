@@ -1,4 +1,4 @@
-package com.example.model
+package cz.davidkurzica.model
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.jodatime.date

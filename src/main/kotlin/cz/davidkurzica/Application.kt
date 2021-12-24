@@ -1,6 +1,6 @@
-package com.example
+package cz.davidkurzica
 
-import com.example.db.DatabaseFactory.initDatabase
+import cz.davidkurzica.service.DatabaseFactory.initDatabase
 import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.routing.*

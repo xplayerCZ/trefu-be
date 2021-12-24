@@ -1,9 +1,10 @@
-package com.example.service
+package cz.davidkurzica.service
 
-import com.example.db.DatabaseFactory.dbQuery
-import com.example.model.Connection
-import com.example.model.Connections
+import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.model.Connection
+import cz.davidkurzica.model.Connections
 import org.jetbrains.exposed.sql.*
+import org.joda.time.LocalTime
 
 class ConnectionService {
     private val lineController = LineService()
@@ -24,6 +25,7 @@ class ConnectionService {
                 it[notes] = notes
                 it[lineId] = connection.line.id!!
                 it[duringWeekDay] = connection.duringWeekDay
+                it[times] = connection.times.map { time -> time.millisOfSecond }.joinToString { ";" }
             } get Connections.id
         }
         return get(key)!!
@@ -37,6 +39,7 @@ class ConnectionService {
                 it[notes] = notes
                 it[lineId] = connection.line.id!!
                 it[duringWeekDay] = connection.duringWeekDay
+                it[times] = connection.times.map { time -> time.millisOfSecond }.joinToString { ";" }
             }
         }
         return get(id)
@@ -50,6 +53,7 @@ class ConnectionService {
             number = row[Connections.number],
             notes = row[Connections.notes],
             line = lineController.get(row[Connections.lineId])!!,
-            duringWeekDay = row[Connections.duringWeekDay]
+            duringWeekDay = row[Connections.duringWeekDay],
+            times = row[Connections.times].split(";").map { LocalTime(it) }
         )
 }
