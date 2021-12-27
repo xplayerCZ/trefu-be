@@ -1,17 +1,23 @@
 package cz.davidkurzica.model
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object Lines : Table() {
-    val id = integer("id").autoIncrement()
     val shortCode = text("shortCode")
-    val fullCode = text("longCode")
+    val fullCode = integer("fullCode")
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Lines_ID")
+    override val primaryKey = PrimaryKey(fullCode, name = "PK_Lines_ID")
 }
 
+@Serializable
 data class Line(
-    val id: Int?,
-    val fullCode: String,
+    val fullCode: Int,
+    val shortCode: String
+)
+
+@Serializable
+data class LineDTO(
+    val fullCode: Int,
     val shortCode: String
 )

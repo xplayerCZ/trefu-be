@@ -1,4 +1,4 @@
-package cz.davidkurzica.db.migration
+package db.migration
 
 import cz.davidkurzica.model.*
 import org.flywaydb.core.api.migration.BaseJavaMigration
@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class V1__Initial_version: BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Connections, ConnectionStops, Lines, Packets, Stops, Users)
+            SchemaUtils.create(Connections, TimetableStops, Timetables, Lines, Packets, Stops, Users)
         }
     }
 }

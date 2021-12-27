@@ -21,7 +21,7 @@ object DatabaseFactory {
         configFile: String
     ) = HikariDataSource(HikariConfig(configFile).apply {
         schema = "public"
-        maximumPoolSize = 3
+        maximumPoolSize = 50
         isAutoCommit = false
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
@@ -35,10 +35,10 @@ object DatabaseFactory {
             flyway.info()
             flyway.migrate()
         } catch (e: Exception) {
-            log.error("Exception running flyway migration", e)
+            log.error("Exception running flyway db.migration", e)
             throw e
         }
-        log.info("Flyway migration has finished")
+        log.info("Flyway db.migration has finished")
     }
 
     suspend fun <T> dbQuery(

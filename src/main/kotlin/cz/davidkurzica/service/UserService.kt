@@ -2,6 +2,7 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import cz.davidkurzica.model.User
+import cz.davidkurzica.model.UserDTO
 import cz.davidkurzica.model.Users
 import org.jetbrains.exposed.sql.*
 
@@ -15,7 +16,7 @@ class UserService {
         Users.selectAll().map { toUser(it) }
     }
 
-    suspend fun insert(user: User): User {
+    suspend fun insert(user: UserDTO): User {
         var key = 0
         dbQuery {
             key = Users.insert {
@@ -28,7 +29,7 @@ class UserService {
     }
 
     suspend fun update(user: User): User? {
-        val id = user.id!!
+        val id = user.id
         dbQuery {
             Users.update({ Users.id eq id }) {
                 it[age] = user.age

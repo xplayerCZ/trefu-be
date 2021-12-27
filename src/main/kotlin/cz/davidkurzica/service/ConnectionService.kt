@@ -2,12 +2,13 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import cz.davidkurzica.model.Connection
+import cz.davidkurzica.model.ConnectionDTO
 import cz.davidkurzica.model.Connections
 import org.jetbrains.exposed.sql.*
 import org.joda.time.LocalTime
 
 class ConnectionService {
-    private val lineController = LineService()
+    private val timetableService = TimetableService()
 
     suspend fun get(id: Int) = dbQuery {
         Connections.select { Connections.id eq id }.mapNotNull { toConnection(it) }.singleOrNull()
@@ -17,14 +18,13 @@ class ConnectionService {
         Connections.selectAll().map { toConnection(it) }
     }
 
-    suspend fun insert(connection: Connection): Connection {
+    suspend fun insert(connection: ConnectionDTO): Connection {
         var key = 0
         dbQuery {
             key = Connections.insert {
-                it[number] = number
-                it[notes] = notes
-                it[lineId] = connection.line.id!!
-                it[duringWeekDay] = connection.duringWeekDay
+                it[number] = connection.number
+                it[notes] = connection.notes
+                it[timetableId] = connection.timetableId
                 it[times] = connection.times.map { time -> time.millisOfSecond }.joinToString { ";" }
             } get Connections.id
         }
@@ -32,13 +32,12 @@ class ConnectionService {
     }
 
     suspend fun update(connection: Connection): Connection? {
-        val id = connection.id!!
+        val id = connection.id
         dbQuery {
             Connections.update({ Connections.id eq id }) {
-                it[number] = number
-                it[notes] = notes
-                it[lineId] = connection.line.id!!
-                it[duringWeekDay] = connection.duringWeekDay
+                it[number] = connection.number
+                it[notes] = connection.notes
+                it[timetableId] = connection.timetable.id
                 it[times] = connection.times.map { time -> time.millisOfSecond }.joinToString { ";" }
             }
         }
@@ -52,8 +51,7 @@ class ConnectionService {
             id = row[Connections.id],
             number = row[Connections.number],
             notes = row[Connections.notes],
-            line = lineController.get(row[Connections.lineId])!!,
-            duringWeekDay = row[Connections.duringWeekDay],
-            times = row[Connections.times].split(";").map { LocalTime(it) }
+            timetable = timetableService.get(row[Connections.timetableId])!!,
+            times = row[Connections.times].split(";").map { LocalTime(it.toLong()) }
         )
 }

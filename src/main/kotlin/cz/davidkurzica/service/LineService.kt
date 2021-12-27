@@ -7,8 +7,8 @@ import org.jetbrains.exposed.sql.*
 
 class LineService {
 
-    suspend fun get(id: Int) = dbQuery {
-        Lines.select { Lines.id eq id }.mapNotNull { toLine(it) }.singleOrNull()
+    suspend fun get(fullCode: Int) = dbQuery {
+        Lines.select { Lines.fullCode eq fullCode }.mapNotNull { toLine(it) }.singleOrNull()
     }
 
     suspend fun getAll() = dbQuery {
@@ -21,27 +21,28 @@ class LineService {
             key = Lines.insert {
                 it[fullCode] = line.fullCode
                 it[shortCode] = line.shortCode
-            } get Lines.id
+            } get Lines.fullCode
         }
         return get(key)!!
     }
 
     suspend fun update(line: Line): Line? {
-        val id = line.id!!
+        val fullCode = line.fullCode
+        var exists = false
         dbQuery {
-            Lines.update({ Lines.id eq id }) {
-                it[fullCode] = line.fullCode
-                it[shortCode] = line.shortCode
-            }
+            exists = Lines.select { Lines.fullCode eq fullCode }.singleOrNull() != null
         }
-        return get(id)
+        return if (!exists) {
+            insert(line)
+        } else {
+            return null
+        }
     }
 
-    suspend fun delete(id: Int) = dbQuery { Lines.deleteWhere { Lines.id eq id } > 0 }
+    suspend fun delete(fullCode: Int) = dbQuery { Lines.deleteWhere { Lines.fullCode eq fullCode } > 0 }
 
     private fun toLine(row: ResultRow) =
         Line(
-            id = row[Lines.id],
             fullCode = row[Lines.fullCode],
             shortCode = row[Lines.shortCode]
         )

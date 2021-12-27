@@ -1,21 +1,32 @@
 package cz.davidkurzica.model
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object Stops : Table() {
-    val id = integer("id").autoIncrement()
+    val id = integer("id")
     val name = text("name")
     val latitude = text("latitude")
     val longitude = text("longitude")
-    val code = text("code")
+    val code = integer("code")
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Stops_ID")
+    override val primaryKey = PrimaryKey(code, name = "PK_Stops_ID")
 }
 
+@Serializable
 data class Stop(
-    val id: Int?,
+    val id: Int,
     val name: String,
     val latitude: String,
     val longitude: String,
-    val code: String
+    val code: Int
+)
+
+@Serializable
+data class StopDTO(
+    val id: Int,
+    val name: String,
+    val latitude: String,
+    val longitude: String,
+    val code: Int
 )
