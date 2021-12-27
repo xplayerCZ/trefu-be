@@ -6,6 +6,8 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.slf4j.LoggerFactory
+import java.sql.Connection
+import java.sql.Connection.TRANSACTION_REPEATABLE_READ
 
 object DatabaseFactory {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -21,7 +23,7 @@ object DatabaseFactory {
         configFile: String
     ) = HikariDataSource(HikariConfig(configFile).apply {
         schema = "public"
-        maximumPoolSize = 50
+        maximumPoolSize = 3
         isAutoCommit = false
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
@@ -43,5 +45,5 @@ object DatabaseFactory {
 
     suspend fun <T> dbQuery(
         block: suspend () -> T
-    ): T = newSuspendedTransaction { block() }
+    ): T = newSuspendedTransaction(transactionIsolation = TRANSACTION_REPEATABLE_READ) { block() }
 }

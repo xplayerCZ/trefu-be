@@ -1,10 +1,7 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.Lines
+import cz.davidkurzica.model.*
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import cz.davidkurzica.model.Timetable
-import cz.davidkurzica.model.TimetableDTO
-import cz.davidkurzica.model.Timetables
 import org.jetbrains.exposed.sql.*
 
 class TimetableService {
@@ -12,6 +9,7 @@ class TimetableService {
     private val lineService = LineService()
     private val packetService = PacketService()
     private val timetableStopService = TimetableStopService()
+    private val connectionService = ConnectionService()
 
     suspend fun get(id: Int) = dbQuery {
         Timetables.select { Timetables.id eq id }.mapNotNull { toTimetable(it) }.singleOrNull()
@@ -21,13 +19,24 @@ class TimetableService {
         Timetables.selectAll().map { toTimetable(it) }
     }
 
-    //TODO: Fix get callback
     suspend fun insert(timetable: TimetableDTO) {
+        var key = 0
         dbQuery {
-            Timetables.insert {
+            key = Timetables.insert {
                 it[packetId] = timetable.packetId
                 it[lineId] = timetable.lineId
                 it[duringWeekDay] = timetable.duringWeekDay
+                it[valid] = timetable.valid
+            } get Timetables.id
+        }
+        dbQuery {
+            timetable.connections.forEach {
+                connectionService.update(it, key)
+            }
+        }
+        dbQuery {
+            timetable.stopIds.forEach {
+                timetableStopService.insert(TimetableStopDTO(it, key))
             }
         }
     }
@@ -41,5 +50,7 @@ class TimetableService {
             line = lineService.get(row[Timetables.lineId])!!,
             stops = timetableStopService.getByTimetables(row[Timetables.id]).map { stopService.get(it.stopId)!! },
             duringWeekDay = row[Timetables.duringWeekDay],
+            connections = connectionService.getByTimetable(row[Timetables.id]),
+            valid = row[Timetables.valid]
         )
 }

@@ -19,16 +19,14 @@ object Connections: Table() {
 @Serializable
 data class Connection(
     val id: Int,
-    val timetable: Timetable,
     val number: Int,
     val notes: String,
-    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>
+    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>
 )
 
 @Serializable
 data class ConnectionDTO(
-    val timetableId: Int,
     val number: Int,
     val notes: String,
-    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>
+    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>
 )

@@ -10,7 +10,7 @@ object Stops : Table() {
     val longitude = text("longitude")
     val code = integer("code")
 
-    override val primaryKey = PrimaryKey(code, name = "PK_Stops_ID")
+    override val primaryKey = PrimaryKey(id, name = "PK_Stops_ID")
 }
 
 @Serializable

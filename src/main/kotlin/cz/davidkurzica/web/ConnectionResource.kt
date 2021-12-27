@@ -24,18 +24,6 @@ fun Route.connection(connectionService: ConnectionService) {
             else call.respond(connection)
         }
 
-        post {
-            val connection = call.receive<ConnectionDTO>()
-            call.respond(HttpStatusCode.Created, connectionService.insert(connection))
-        }
-
-        put {
-            val connection = call.receive<Connection>()
-            val updated = connectionService.update(connection)
-            if (updated == null) call.respond(HttpStatusCode.NotFound)
-            else call.respond(HttpStatusCode.OK, updated)
-        }
-
         delete("/{id}") {
             val id = call.parameters["id"]?.toInt() ?: throw IllegalStateException("Must provide id")
             val removed = connectionService.delete(id)
