@@ -4,14 +4,13 @@ import cz.davidkurzica.model.Timetables.references
 import cz.davidkurzica.util.LocalTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
-import org.joda.time.LocalTime
+import java.time.LocalTime
 
 object Connections: Table() {
     val id = integer("id").autoIncrement()
     val timetableId = integer("timetable_id") references Timetables.id
     val number = integer("number")
     val notes = text("notes")
-    val times = text("times") //String Array in CSV format separated by ';'
 
     override val primaryKey = PrimaryKey(id, name = "PK_Connection_ID")
 }

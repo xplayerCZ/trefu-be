@@ -28,6 +28,8 @@ fun Application.module() {
     val packetService = PacketService()
     val stopService = StopService()
     val timetableService = TimetableService()
+    val trackService = TrackService()
+    val departureService = DepartureService()
 
     install(Routing) {
         connection(connectionService)
@@ -35,6 +37,8 @@ fun Application.module() {
         packet(packetService)
         stop(stopService)
         timetable(timetableService)
+        track(trackService)
+        departure(departureService)
     }
 }
 

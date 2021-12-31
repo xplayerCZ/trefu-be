@@ -10,6 +10,7 @@ object Timetables: Table() {
     val lineId = integer("line_id") references Lines.fullCode
     val duringWeekDay = bool("duringWeekDay")
     val valid = bool("valid")
+    val direction = integer("direction")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Timetables_ID")
 }
@@ -22,7 +23,8 @@ data class Timetable(
     val duringWeekDay: Boolean,
     val stops: List<Stop>,
     val connections: List<Connection>,
-    val valid: Boolean
+    val valid: Boolean,
+    val direction: Int
 )
 
 @Serializable
@@ -32,5 +34,6 @@ data class TimetableDTO(
     val duringWeekDay: Boolean,
     val stopIds: List<Int>,
     val connections: List<ConnectionDTO>,
-    val valid: Boolean
+    val valid: Boolean,
+    val direction: Int
 )

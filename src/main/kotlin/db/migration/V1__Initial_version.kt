@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class V1__Initial_version: BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Connections, TimetableStops, Timetables, Lines, Packets, Stops, Users)
+            SchemaUtils.create(Connections, Departures, Lines, Packets, Routes, RouteStops, Stops)
         }
     }
 }

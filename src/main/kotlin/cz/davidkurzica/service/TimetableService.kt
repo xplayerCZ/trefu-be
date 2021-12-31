@@ -8,8 +8,9 @@ class TimetableService {
     private val stopService = StopService()
     private val lineService = LineService()
     private val packetService = PacketService()
-    private val timetableStopService = TimetableStopService()
+    private val routeStopService = RouteStopsService()
     private val connectionService = ConnectionService()
+    private val routeService = RouteService()
 
     suspend fun get(id: Int) = dbQuery {
         Timetables.select { Timetables.id eq id }.mapNotNull { toTimetable(it) }.singleOrNull()
@@ -27,16 +28,12 @@ class TimetableService {
                 it[lineId] = timetable.lineId
                 it[duringWeekDay] = timetable.duringWeekDay
                 it[valid] = timetable.valid
+                it[direction] = timetable.direction
             } get Timetables.id
         }
         dbQuery {
             timetable.connections.forEach {
                 connectionService.update(it, key)
-            }
-        }
-        dbQuery {
-            timetable.stopIds.forEach {
-                timetableStopService.insert(TimetableStopDTO(it, key))
             }
         }
     }
@@ -48,9 +45,10 @@ class TimetableService {
             id = row[Timetables.id],
             packet = packetService.get(row[Timetables.packetId])!!,
             line = lineService.get(row[Timetables.lineId])!!,
-            stops = timetableStopService.getByTimetables(row[Timetables.id]).map { stopService.get(it.stopId)!! },
+            stops = stopService.getAllByTimetableId(row[Timetables.id]),
             duringWeekDay = row[Timetables.duringWeekDay],
             connections = connectionService.getByTimetable(row[Timetables.id]),
-            valid = row[Timetables.valid]
+            valid = row[Timetables.valid],
+            direction = row[Timetables.direction]
         )
 }

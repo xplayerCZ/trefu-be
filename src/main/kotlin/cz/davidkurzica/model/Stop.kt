@@ -30,3 +30,10 @@ data class StopDTO(
     val longitude: String,
     val code: Int
 )
+
+@Serializable
+data class Track(
+    val id: Int,
+    val name: String,
+    val enabled: Boolean,
+)

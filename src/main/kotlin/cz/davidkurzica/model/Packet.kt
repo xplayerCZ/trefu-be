@@ -3,8 +3,8 @@ package cz.davidkurzica.model
 import cz.davidkurzica.util.LocalDateSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.jodatime.date
-import org.joda.time.LocalDate
+import org.jetbrains.exposed.sql.javatime.date
+import java.time.LocalDate
 
 object Packets : Table() {
     val id = integer("id").autoIncrement()

@@ -6,7 +6,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 object LocalDateSerializer : KSerializer<LocalDate>
 {
@@ -19,6 +19,6 @@ object LocalDateSerializer : KSerializer<LocalDate>
 
     override fun deserialize(decoder: Decoder): LocalDate {
         val string = decoder.decodeString()
-        return LocalDate(string)
+        return LocalDate.parse(string)
     }
 }

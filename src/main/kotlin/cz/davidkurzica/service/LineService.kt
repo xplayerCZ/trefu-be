@@ -3,6 +3,8 @@ package cz.davidkurzica.service
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import cz.davidkurzica.model.Line
 import cz.davidkurzica.model.Lines
+import cz.davidkurzica.model.RouteStops
+import cz.davidkurzica.model.Timetables
 import org.jetbrains.exposed.sql.*
 
 class LineService {
@@ -13,6 +15,14 @@ class LineService {
 
     suspend fun getAll() = dbQuery {
         Lines.selectAll().map { toLine(it) }
+    }
+
+    suspend fun getByRouteStopId(routeStopId: Int) = dbQuery {
+        (Lines innerJoin Timetables innerJoin RouteStops)
+            .slice(Lines.fullCode, Lines.shortCode)
+            .select { RouteStops.id eq routeStopId }
+            .mapNotNull { toLine(it) }
+            .singleOrNull()
     }
 
     suspend fun insert(line: Line): Line {

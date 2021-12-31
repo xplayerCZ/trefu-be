@@ -7,8 +7,7 @@ import cz.davidkurzica.model.PacketDTO
 import cz.davidkurzica.model.Packets
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.joda.time.DateTime
-import org.joda.time.LocalDate
+
 
 class PacketService {
 
@@ -26,8 +25,8 @@ class PacketService {
         dbQuery {
             key = Packets.insert {
                 it[id] = packet.id
-                it[from] = packet.from.toDateTimeAtStartOfDay()
-                it[to] = packet.to.toDateTimeAtStartOfDay()
+                it[from] = packet.from
+                it[to] = packet.to
                 it[valid] = packet.valid
             } get Packets.id
         }
@@ -52,8 +51,8 @@ class PacketService {
     private fun toPacket(row: ResultRow) =
         Packet(
             id = row[Packets.id],
-            from = row[Packets.from].toLocalDate(),
-            to = row[Packets.to].toLocalDate(),
+            from = row[Packets.from],
+            to = row[Packets.to],
             valid = row[Packets.valid]
         )
 }
