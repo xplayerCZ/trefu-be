@@ -34,3 +34,11 @@ data class DepartureDTO(
     val packetId: Int,
     val index: Int,
 )
+
+@Serializable
+data class DepartureSimple(
+    val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
+    val lineShortCode: String,
+    val lastStopName: String,
+)
+

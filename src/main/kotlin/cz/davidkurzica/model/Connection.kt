@@ -27,5 +27,4 @@ data class Connection(
 data class ConnectionDTO(
     val number: Int,
     val notes: String,
-    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>
 )

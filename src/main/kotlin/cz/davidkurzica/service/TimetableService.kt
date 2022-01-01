@@ -20,20 +20,28 @@ class TimetableService {
         Timetables.selectAll().map { toTimetable(it) }
     }
 
+    suspend fun exists(timetable: TimetableDTO) = dbQuery {
+        Timetables.select {
+            Timetables.packetId eq timetable.packetId and (Timetables.lineId eq timetable.lineId and (Timetables.duringWeekDay eq Timetables.duringWeekDay and (Timetables.valid eq timetable.valid and (Timetables.direction eq timetable.direction))))
+        }.singleOrNull() != null
+    }
+
     suspend fun insert(timetable: TimetableDTO) {
         var key = 0
-        dbQuery {
-            key = Timetables.insert {
-                it[packetId] = timetable.packetId
-                it[lineId] = timetable.lineId
-                it[duringWeekDay] = timetable.duringWeekDay
-                it[valid] = timetable.valid
-                it[direction] = timetable.direction
-            } get Timetables.id
-        }
-        dbQuery {
-            timetable.connections.forEach {
-                connectionService.update(it, key)
+        if(!exists(timetable)) {
+            dbQuery {
+                key = Timetables.insert {
+                    it[packetId] = timetable.packetId
+                    it[lineId] = timetable.lineId
+                    it[duringWeekDay] = timetable.duringWeekDay
+                    it[valid] = timetable.valid
+                    it[direction] = timetable.direction
+                } get Timetables.id
+            }
+            dbQuery {
+                timetable.connections.forEach {
+                    connectionService.update(it, key)
+                }
             }
         }
     }
@@ -45,7 +53,6 @@ class TimetableService {
             id = row[Timetables.id],
             packet = packetService.get(row[Timetables.packetId])!!,
             line = lineService.get(row[Timetables.lineId])!!,
-            stops = stopService.getAllByTimetableId(row[Timetables.id]),
             duringWeekDay = row[Timetables.duringWeekDay],
             connections = connectionService.getByTimetable(row[Timetables.id]),
             valid = row[Timetables.valid],

@@ -1,5 +1,6 @@
 package cz.davidkurzica.model
 
+import cz.davidkurzica.model.Routes.references
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
@@ -11,6 +12,7 @@ object Timetables: Table() {
     val duringWeekDay = bool("duringWeekDay")
     val valid = bool("valid")
     val direction = integer("direction")
+    val routeId = (integer("route_id") references Routes.id).nullable()
 
     override val primaryKey = PrimaryKey(id, name = "PK_Timetables_ID")
 }
@@ -21,7 +23,6 @@ data class Timetable(
     val packet: Packet,
     val line: Line,
     val duringWeekDay: Boolean,
-    val stops: List<Stop>,
     val connections: List<Connection>,
     val valid: Boolean,
     val direction: Int
@@ -32,7 +33,6 @@ data class TimetableDTO(
     val packetId: Int,
     val lineId: Int,
     val duringWeekDay: Boolean,
-    val stopIds: List<Int>,
     val connections: List<ConnectionDTO>,
     val valid: Boolean,
     val direction: Int

@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object Routes: Table() {
     val id = integer("id").autoIncrement()
-    val timetableId = integer("timetable_id") references Timetables.id
+    val length = integer("length")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Route_ID")
 }

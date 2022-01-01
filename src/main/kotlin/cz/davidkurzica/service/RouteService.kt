@@ -16,24 +16,32 @@ class RouteService {
     }
 
     suspend fun insert(route: RouteDTO) {
-        var timetableKey = 0
-        var routeKey = 0
+        var timetableKeys = emptyList<Int>()
+        var routeKeys = mutableListOf<Int>()
         dbQuery {
-            timetableKey = Timetables.slice(Timetables.id)
+            timetableKeys = Timetables.slice(Timetables.id)
                 .select { Timetables.direction eq route.direction and (Timetables.lineId eq route.lineFullCode)}
-                .mapNotNull { it[Timetables.id] }.singleOrNull()!!
+                .mapNotNull { it[Timetables.id] }
         }
         dbQuery {
-            routeKey = Routes.insert {
-                it[timetableId] = timetableKey
+            val routeKey = Routes.insert {
+                it[length] = route.stopIds.size
             } get Routes.id
+            timetableKeys.forEach { key ->
+                Timetables.update( { Timetables.id eq key} ) {
+                    it[routeId] = routeKey
+                }
+            }
+            routeKeys.add(routeKey)
         }
         dbQuery {
             route.stopIds.forEachIndexed { i, item ->
-                RouteStops.insert {
-                    it[index] = i
-                    it[routeId] = routeKey
-                    it[stopId] = item
+                routeKeys.forEach { routeKey ->
+                    RouteStops.insert {
+                        it[index] = i
+                        it[routeId] = routeKey
+                        it[stopId] = item
+                    }
                 }
             }
         }
