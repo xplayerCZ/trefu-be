@@ -2,55 +2,39 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import io.ktor.routing.*
-import org.jetbrains.exposed.sql.*
+import cz.davidkurzica.util.toRoute
+
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 
 class RouteService {
 
-    suspend fun get(id: Int) = dbQuery {
-        Routes.select { Routes.id eq id }.mapNotNull { toResult(it) }.singleOrNull()
+    suspend fun getRoute(id: Int): Route? = dbQuery {
+        Routes.select {
+            (Routes.id eq id)
+        }.mapNotNull { toRoute(it) }
+            .singleOrNull()
     }
 
-    suspend fun getAll() = dbQuery {
-        Routes.selectAll().map { toResult(it) }
-    }
-
-    suspend fun insert(route: RouteDTO) {
-        var timetableKeys = emptyList<Int>()
-        var routeKeys = mutableListOf<Int>()
+    suspend fun addRoute(route: NewRoute): Route {
+        var key = 0
         dbQuery {
-            timetableKeys = Timetables.slice(Timetables.id)
-                .select { Timetables.direction eq route.direction and (Timetables.lineId eq route.lineFullCode)}
-                .mapNotNull { it[Timetables.id] }
+            key = (Routes.insert {
+                it[id] = route.id
+                it[length] = route.length
+                it[direction] = route.direction
+            } get Routes.id)
         }
         dbQuery {
-            val routeKey = Routes.insert {
-                it[length] = route.stopIds.size
-            } get Routes.id
-            timetableKeys.forEach { key ->
-                Timetables.update( { Timetables.id eq key} ) {
-                    it[routeId] = routeKey
-                }
-            }
-            routeKeys.add(routeKey)
-        }
-        dbQuery {
-            route.stopIds.forEachIndexed { i, item ->
-                routeKeys.forEach { routeKey ->
-                    RouteStops.insert {
-                        it[index] = i
-                        it[routeId] = routeKey
-                        it[stopId] = item
-                    }
+            route.stopIds.forEachIndexed { _index, _stopId ->
+                RouteStops.insert {
+                    it[stopId] = _stopId
+                    it[routeId] = key
+                    it[served] = route.servedStopsIds.contains(_stopId)
+                    it[index] = _index
                 }
             }
         }
+        return getRoute(key)!!
     }
-
-    suspend fun delete(id: Int) = dbQuery { Routes.deleteWhere { Routes.id eq id } > 0 }
-
-    private suspend fun toResult(row: ResultRow) {
-
-    }
-
 }

@@ -1,30 +1,40 @@
 package cz.davidkurzica.model
 
-import cz.davidkurzica.model.Timetables.references
 import cz.davidkurzica.util.LocalTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 import java.time.LocalTime
 
 object Connections: Table() {
-    val id = integer("id").autoIncrement()
-    val timetableId = integer("timetable_id") references Timetables.id
+    val id = integer("connection_id").autoIncrement()
+    val routeId = integer("route_id") references Routes.id
     val number = integer("number")
-    val notes = text("notes")
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Connection_ID")
+    override val primaryKey = PrimaryKey(id, name = "PK_Connections")
 }
 
+object ConnectionRules: Table() {
+    val connectionId = integer("connection_id") references Connections.id
+    val ruleId = integer("rule_id") references Rules.id
+
+    override val primaryKey = PrimaryKey(connectionId, ruleId, name = "PK_Timetables")
+}
+
+//Connection interface is responsible for Departures and ConnectionRules entries
 @Serializable
-data class Connection(
+class NewConnection(
     val id: Int,
+    val routeId: Int,
     val number: Int,
-    val notes: String,
-    val times: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>
+    val departureTimes: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>,
+    val ruleIds: List<Int>
 )
 
 @Serializable
-data class ConnectionDTO(
+class Connection(
+    val id: Int,
+    val route: Route,
     val number: Int,
-    val notes: String,
+    val departures: List<Departure>,
+    val rules: List<Rule>
 )

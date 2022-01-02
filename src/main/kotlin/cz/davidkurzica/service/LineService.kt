@@ -1,59 +1,38 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.model.*
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import cz.davidkurzica.model.Line
-import cz.davidkurzica.model.Lines
-import cz.davidkurzica.model.RouteStops
-import cz.davidkurzica.model.Timetables
-import org.jetbrains.exposed.sql.*
+import cz.davidkurzica.util.selectPacketByPacketId
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 
 class LineService {
 
-    suspend fun get(fullCode: Int) = dbQuery {
-        Lines.select { Lines.fullCode eq fullCode }.mapNotNull { toLine(it) }.singleOrNull()
-    }
-
-    suspend fun getAll() = dbQuery {
-        Lines.selectAll().map { toLine(it) }
-    }
-
-    suspend fun getByRouteStopId(routeStopId: Int) = dbQuery {
-        (Lines innerJoin Timetables innerJoin RouteStops)
-            .slice(Lines.fullCode, Lines.shortCode)
-            .select { RouteStops.id eq routeStopId }
-            .mapNotNull { toLine(it) }
+    suspend fun getLine(fullCode: Int): Line? = dbQuery {
+        Lines.select {
+            (Lines.fullCode eq fullCode)
+        }.mapNotNull { toLine(it) }
             .singleOrNull()
     }
 
-    suspend fun insert(line: Line): Line {
+    suspend fun addLine(line: NewLine): Line {
         var key = 0
         dbQuery {
-            key = Lines.insert {
-                it[fullCode] = line.fullCode
+            key = (Lines.insert {
                 it[shortCode] = line.shortCode
-            } get Lines.fullCode
+                it[fullCode] = line.fullCode
+                it[packetId] = line.packetId
+            } get Lines.fullCode)
         }
-        return get(key)!!
+        return getLine(key)!!
     }
 
-    suspend fun update(line: Line): Line? {
-        val fullCode = line.fullCode
-        var exists = false
-        dbQuery {
-            exists = Lines.select { Lines.fullCode eq fullCode }.singleOrNull() != null
-        }
-        return if (!exists) {
-            insert(line)
-        } else {
-            return null
-        }
-    }
-
-    suspend fun delete(fullCode: Int) = dbQuery { Lines.deleteWhere { Lines.fullCode eq fullCode } > 0 }
-
-    private fun toLine(row: ResultRow) =
+    private fun toLine(row: ResultRow): Line =
         Line(
+            shortCode = row[Lines.shortCode],
             fullCode = row[Lines.fullCode],
-            shortCode = row[Lines.shortCode]
+            packet = selectPacketByPacketId(row[Lines.packetId])
         )
 }

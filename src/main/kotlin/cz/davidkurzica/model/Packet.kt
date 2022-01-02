@@ -7,16 +7,16 @@ import org.jetbrains.exposed.sql.javatime.date
 import java.time.LocalDate
 
 object Packets : Table() {
-    val id = integer("id").autoIncrement()
+    val id = integer("packet_id").autoIncrement()
     val from = date("from")
     val to = date("to")
     val valid = bool("valid")
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Packets_ID")
+    override val primaryKey = PrimaryKey(id, name = "PK_Packets")
 }
 
 @Serializable
-data class Packet(
+class NewPacket(
     val id: Int,
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
@@ -24,7 +24,7 @@ data class Packet(
 )
 
 @Serializable
-data class PacketDTO(
+class Packet(
     val id: Int,
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,

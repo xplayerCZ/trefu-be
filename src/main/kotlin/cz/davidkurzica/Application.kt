@@ -27,8 +27,6 @@ fun Application.module() {
     val lineService = LineService()
     val packetService = PacketService()
     val stopService = StopService()
-    val timetableService = TimetableService()
-    val trackService = TrackService()
     val departureService = DepartureService()
     val routeService = RouteService()
 
@@ -37,8 +35,6 @@ fun Application.module() {
         line(lineService)
         packet(packetService)
         stop(stopService)
-        timetable(timetableService)
-        track(trackService)
         departure(departureService)
         route(routeService)
     }
