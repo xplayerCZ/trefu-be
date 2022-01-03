@@ -23,6 +23,7 @@ class RouteService {
                 it[id] = route.id
                 it[length] = route.length
                 it[direction] = route.direction
+                it[lineFullCode] = route.lineFullCode
             } get Routes.id)
         }
         dbQuery {

@@ -91,3 +91,9 @@ fun toConnection(row: ResultRow): Connection =
         departures = selectDeparturesByConnectionId(row[Connections.id]),
         rules = selectRulesByConnectionId(row[Connections.id])
     )
+
+fun selectRoutesByLineFullCode(lineFullCode: Int): List<Route> {
+    return Routes.select {
+        (Routes.lineFullCode eq lineFullCode )
+    }.mapNotNull { toRoute(it) }
+}

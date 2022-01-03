@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object Routes: Table() {
     val id = integer("route_id").autoIncrement()
+    val lineFullCode = integer("line_id") references Lines.fullCode
     val length = integer("length")
     val direction = integer("direction")
 
@@ -27,7 +28,8 @@ class NewRoute(
     val length: Int,
     val direction: Int,
     val stopIds: List<Int>,
-    val servedStopsIds:  List<Int>
+    val servedStopsIds:  List<Int>,
+    val lineFullCode: Int
 )
 
 @Serializable

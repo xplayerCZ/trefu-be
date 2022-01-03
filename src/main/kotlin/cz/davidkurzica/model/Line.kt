@@ -22,5 +22,6 @@ class NewLine(
 class Line(
     val shortCode: String,
     val fullCode: Int,
-    val packet: Packet
+    val packet: Packet,
+    val routes: List<Route>
 )
