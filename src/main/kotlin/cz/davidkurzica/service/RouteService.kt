@@ -20,8 +20,7 @@ class RouteService {
         var key = 0
         dbQuery {
             key = (Routes.insert {
-                it[id] = route.id
-                it[length] = route.length
+                it[length] = route.stopIds.size
                 it[direction] = route.direction
                 it[lineFullCode] = route.lineFullCode
             } get Routes.id)

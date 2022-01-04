@@ -20,7 +20,6 @@ class ConnectionService {
         var key = 0
         dbQuery {
             key = (Connections.insert {
-                it[id] = connection.id
                 it[routeId] = connection.routeId
                 it[number] = connection.number
             } get Connections.id)

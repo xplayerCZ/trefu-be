@@ -24,8 +24,8 @@ class StopService {
                 it[id] = stop.id
                 it[name] = stop.name
                 it[latitude] = stop.latitude
-                it[longitude] = longitude
-                it[code] = code
+                it[longitude] = stop.longitude
+                it[code] = stop.code
             } get Stops.id)
         }
         return getStop(key)!!

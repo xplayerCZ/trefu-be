@@ -24,8 +24,6 @@ object RouteStops : Table("route_stops") {
 //Route interface is responsible for RouteStop entries
 @Serializable
 class NewRoute(
-    val id: Int,
-    val length: Int,
     val direction: Int,
     val stopIds: List<Int>,
     val servedStopsIds:  List<Int>,

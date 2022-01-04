@@ -23,10 +23,9 @@ object ConnectionRules: Table() {
 //Connection interface is responsible for Departures and ConnectionRules entries
 @Serializable
 class NewConnection(
-    val id: Int,
     val routeId: Int,
     val number: Int,
-    val departureTimes: List<@Serializable(with = LocalTimeSerializer::class) LocalTime>,
+    val departureTimes: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>,
     val ruleIds: List<Int>
 )
 

@@ -10,7 +10,7 @@ import io.ktor.routing.*
 
 fun Route.rule(ruleService: RuleService) {
 
-    route("/route") {
+    route("/rule") {
 
         post {
             val rule = call.receive<NewRule>()
