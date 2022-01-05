@@ -27,3 +27,10 @@ class Departure(
     val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
     val index: Int
 )
+
+@Serializable
+data class DepartureItem(
+    val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
+    val lineShortCode: String,
+    val lastStopName: String,
+)

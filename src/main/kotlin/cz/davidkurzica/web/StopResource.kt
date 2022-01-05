@@ -12,6 +12,10 @@ fun Route.stop(stopService: StopService) {
 
     route("/stop") {
 
+        get {
+            call.respond(HttpStatusCode.OK, stopService.getAll())
+        }
+
         post {
             val stop = call.receive<NewStop>()
             call.respond(HttpStatusCode.Created, stopService.addStop(stop))

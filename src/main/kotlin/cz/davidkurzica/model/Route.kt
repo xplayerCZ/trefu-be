@@ -18,7 +18,7 @@ object RouteStops : Table("route_stops") {
     val index = integer("index")
     val served = bool("served")
 
-    override val primaryKey = PrimaryKey(stopId, routeId, name = "PK_RouteStops")
+    override val primaryKey = PrimaryKey(stopId, routeId, index, name = "PK_RouteStops")
 }
 
 //Route interface is responsible for RouteStop entries

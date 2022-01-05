@@ -30,3 +30,10 @@ class Stop(
     val longitude: String,
     val code: Int
 )
+
+@Serializable
+data class StopItem(
+    val id: Int,
+    val name: String,
+    val enabled: Boolean,
+)

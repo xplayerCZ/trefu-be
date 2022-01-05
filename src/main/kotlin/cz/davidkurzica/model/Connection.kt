@@ -13,7 +13,7 @@ object Connections: Table() {
     override val primaryKey = PrimaryKey(id, name = "PK_Connections")
 }
 
-object ConnectionRules: Table() {
+object ConnectionRules: Table("connection_rules") {
     val connectionId = integer("connection_id") references Connections.id
     val ruleId = integer("rule_id") references Rules.id
 
