@@ -41,6 +41,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: Package
+          path: .
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -51,7 +52,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
