@@ -27,6 +27,7 @@ jobs:
           path: build
 
   build-and-push-image:
+    needs: build-app
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -43,7 +44,7 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: path/to/artifact
+        working-directory: .
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
