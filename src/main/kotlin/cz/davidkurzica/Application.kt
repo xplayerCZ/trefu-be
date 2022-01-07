@@ -21,7 +21,7 @@ fun Application.module() {
         })
     }
 
-    DatabaseFactory.initDatabase()
+    DatabaseFactory.initDatabase(this.environment.config)
 
     val connectionService = ConnectionService()
     val lineService = LineService()
