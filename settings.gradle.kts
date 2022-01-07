@@ -1,1 +1,1 @@
-rootProject.name = "trefu-db"
+rootProject.name = "trefu-be"
