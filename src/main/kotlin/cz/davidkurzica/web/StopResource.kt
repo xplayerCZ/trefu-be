@@ -12,6 +12,10 @@ fun Route.stop(stopService: StopService) {
 
     route("/stop") {
 
+        get("/item") {
+            call.respond(HttpStatusCode.OK, stopService.getAllDetail())
+        }
+
         get {
             call.respond(HttpStatusCode.OK, stopService.getAll())
         }

@@ -11,6 +11,9 @@ import io.ktor.routing.*
 fun Route.packet(packetService: PacketService) {
 
     route("/packet") {
+        get {
+            call.respond(HttpStatusCode.OK, packetService.getAll())
+        }
 
         post {
             val packet = call.receive<NewPacket>()

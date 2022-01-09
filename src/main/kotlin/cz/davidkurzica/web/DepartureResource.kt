@@ -13,7 +13,7 @@ fun Route.departure(departureService: DepartureService) {
 
     route("/departure") {
 
-        get {
+        get("/item") {
             if(!call.request.queryParameters["time"].isNullOrEmpty() &&
                 !call.request.queryParameters["stopId"].isNullOrEmpty() &&
                 !call.request.queryParameters["date"].isNullOrEmpty()
@@ -21,6 +21,7 @@ fun Route.departure(departureService: DepartureService) {
                 val time = LocalTime.parse(call.request.queryParameters["time"]!!)
                 val stopId = call.request.queryParameters["stopId"]!!.toInt()
                 val date = LocalDate.parse(call.request.queryParameters["date"]!!)
+
                 call.respond(HttpStatusCode.OK, departureService.get(time, stopId, date))
             } else {
                 call.respond(HttpStatusCode.NotFound)

@@ -12,11 +12,15 @@ import org.jetbrains.exposed.sql.selectAll
 
 class StopService {
 
-    suspend fun getAll(): List<StopItem> = dbQuery {
+    suspend fun getAllDetail(): List<StopItem> = dbQuery {
         Stops
             .slice(Stops.id, Stops.name)
             .selectAll()
             .mapNotNull { toStopItem(it) }
+    }
+
+    suspend fun getAll(): List<Stop> = dbQuery {
+        Stops.selectAll().mapNotNull { toStop(it) }
     }
 
     suspend fun getStop(id: Int): Stop? = dbQuery {

@@ -11,6 +11,9 @@ import io.ktor.routing.*
 fun Route.line(lineService: LineService) {
 
     route("/line") {
+        get {
+            call.respond(HttpStatusCode.OK, lineService.getAll())
+        }
 
         post {
             val line = call.receive<NewLine>()

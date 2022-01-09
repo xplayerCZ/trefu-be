@@ -7,8 +7,13 @@ import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 class PacketService {
+
+    suspend fun getAll() = dbQuery {
+        Packets.selectAll().mapNotNull { toPacket(it) }
+    }
 
     suspend fun getPacket(id: Int): Packet? = dbQuery {
         Packets.select {

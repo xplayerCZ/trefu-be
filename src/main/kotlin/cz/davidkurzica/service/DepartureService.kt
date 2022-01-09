@@ -18,6 +18,7 @@ class DepartureService {
                     .and (Packets.to greaterEq date)
                     .and (Departures.time greater time)
                     .and (RouteStops.stopId eq stopId)
+                    .and (RouteStops.index eq Departures.index)
             }
             .orderBy(Departures.time)
             .limit(10)

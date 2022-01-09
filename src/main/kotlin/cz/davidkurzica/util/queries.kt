@@ -71,7 +71,8 @@ fun toDeparture(row: ResultRow): Departure =
     )
 
 fun selectRulesByConnectionId(connectionId: Int): List<Rule> {
-    return ConnectionRules
+    return (ConnectionRules innerJoin Rules)
+        .slice(Rules.id, Rules.description)
         .select {
             (ConnectionRules.connectionId eq connectionId)
         }.mapNotNull { toRule(it) }
@@ -92,8 +93,8 @@ fun toConnection(row: ResultRow): Connection =
         rules = selectRulesByConnectionId(row[Connections.id])
     )
 
-fun selectRoutesByLineFullCode(lineFullCode: Int): List<Route> {
+fun selectRoutesByLineId(id: Int): List<Route> {
     return Routes.select {
-        (Routes.lineFullCode eq lineFullCode )
+        (Routes.id eq id )
     }.mapNotNull { toRoute(it) }
 }

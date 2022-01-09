@@ -22,7 +22,7 @@ class RouteService {
             key = (Routes.insert {
                 it[length] = route.stopIds.size
                 it[direction] = route.direction
-                it[lineFullCode] = route.lineFullCode
+                it[lineId] =  route.lineId
             } get Routes.id)
         }
         dbQuery {
