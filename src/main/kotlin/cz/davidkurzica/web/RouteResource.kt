@@ -17,4 +17,19 @@ fun Route.route(routeService: RouteService) {
             call.respond(HttpStatusCode.Created, routeService.addRoute(route))
         }
     }
+
+    route("/direction/item") {
+
+        get {
+            if(
+                !call.request.queryParameters["lineId"].isNullOrEmpty()
+            ) {
+                val lineId = call.request.queryParameters["lineId"]!!.toInt()
+
+                call.respond(HttpStatusCode.OK, routeService.getDirections(lineId))
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
+    }
 }

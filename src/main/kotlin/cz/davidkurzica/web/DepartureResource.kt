@@ -27,5 +27,22 @@ fun Route.departure(departureService: DepartureService) {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
+
+        get("/timetable") {
+            if(!call.request.queryParameters["stopId"].isNullOrEmpty() &&
+                !call.request.queryParameters["lineId"].isNullOrEmpty() &&
+                !call.request.queryParameters["directionId"].isNullOrEmpty() &&
+                !call.request.queryParameters["date"].isNullOrEmpty()
+            ) {
+                val stopId = call.request.queryParameters["stopId"]!!.toInt()
+                val lineId = call.request.queryParameters["lineId"]!!.toInt()
+                val directionId = call.request.queryParameters["directionId"]!!.toInt()
+                val date = LocalDate.parse(call.request.queryParameters["date"]!!)
+
+                call.respond(HttpStatusCode.OK, departureService.getTimetable(stopId, lineId, directionId, date))
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
     }
 }

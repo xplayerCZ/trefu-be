@@ -37,3 +37,14 @@ class Connection(
     val departures: List<Departure>,
     val rules: List<Rule>
 )
+
+@Serializable
+data class ConnectionItem(
+    val connectionsParts: List<ConnectionItemPart>)
+
+@Serializable
+data class ConnectionItemPart(
+    val lineShortCode: String,
+    val from: DepartureSimple,
+    val to: DepartureSimple
+)

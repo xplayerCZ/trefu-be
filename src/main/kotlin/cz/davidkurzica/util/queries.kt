@@ -98,3 +98,10 @@ fun selectRoutesByLineId(id: Int): List<Route> {
         (Routes.id eq id )
     }.mapNotNull { toRoute(it) }
 }
+
+fun selectLineShortCodeByLineId(id: Int): String {
+    return Lines.select {
+        (Lines.id eq id )
+    }.mapNotNull { it[Lines.shortCode] }
+        .single()
+}

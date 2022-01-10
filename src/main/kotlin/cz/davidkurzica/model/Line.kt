@@ -27,3 +27,9 @@ class Line(
     val packet: Packet,
     val routes: List<Route>
 )
+
+@Serializable
+class LineItem(
+    val id: Int,
+    val shortCode: String
+)

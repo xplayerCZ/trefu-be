@@ -2,10 +2,13 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
 import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.selectStopsByRouteId
 import cz.davidkurzica.util.toRoute
+import org.jetbrains.exposed.sql.ResultRow
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import javax.sql.RowSetMetaData
 
 class RouteService {
 
@@ -14,6 +17,14 @@ class RouteService {
             (Routes.id eq id)
         }.mapNotNull { toRoute(it) }
             .singleOrNull()
+    }
+
+    suspend fun getDirections(lineId: Int) = dbQuery {
+        (Routes innerJoin Lines)
+            .slice(Routes.id, Routes.direction)
+            .select {
+            (Lines.id eq lineId)
+        }.mapNotNull { toDirection(it) }
     }
 
     suspend fun addRoute(route: NewRoute): Route {
@@ -36,5 +47,13 @@ class RouteService {
             }
         }
         return getRoute(key)!!
+    }
+
+    fun toDirection(row: ResultRow): Direction {
+        val stops = selectStopsByRouteId(row[Routes.id])
+        return Direction(
+            id = row[Routes.direction],
+            description = "${stops.first().name} - ${stops.last().name}"
+        )
     }
 }

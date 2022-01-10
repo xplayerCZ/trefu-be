@@ -37,3 +37,9 @@ class Route(
     val direction: Int,
     val stops: List<Stop>,
 )
+
+@Serializable
+class Direction(
+    val id: Int,
+    val description: String
+)
