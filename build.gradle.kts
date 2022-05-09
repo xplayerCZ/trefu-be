@@ -2,6 +2,7 @@ val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
 val exposedVersion: String by project
+val koinVersion: String by project
 
 plugins {
     application
@@ -39,4 +40,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.1")
 
     implementation("org.flywaydb:flyway-core:8.5.10")
+
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 }

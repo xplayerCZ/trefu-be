@@ -7,9 +7,12 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 import java.time.LocalDate
 
-fun Route.line(lineService: LineService) {
+fun Route.line() {
+
+    val lineService: LineService by inject()
 
     route("/line") {
 

@@ -9,8 +9,21 @@ import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
+import org.koin.dsl.module
+import org.koin.ktor.plugin.Koin
+import org.koin.logger.slf4jLogger
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
+
+val koinModule = module {
+    single { ConnectionService() }
+    single { LineService() }
+    single { PacketService() }
+    single { StopService() }
+    single { DepartureService() }
+    single { RouteService() }
+    single { RuleService() }
+}
 
 fun Application.module() {
     install(CallLogging)
@@ -20,25 +33,21 @@ fun Application.module() {
             isLenient = true
         })
     }
+    install(Koin) {
+        slf4jLogger()
+        modules(koinModule)
+    }
 
     DatabaseFactory.initDatabase(this.environment.config)
 
-    val connectionService = ConnectionService()
-    val lineService = LineService()
-    val packetService = PacketService()
-    val stopService = StopService()
-    val departureService = DepartureService()
-    val routeService = RouteService()
-    val ruleService = RuleService()
-
     install(Routing) {
-        connection(connectionService)
-        line(lineService)
-        packet(packetService)
-        stop(stopService)
-        departure(departureService)
-        route(routeService)
-        rule(ruleService)
+        connection()
+        line()
+        packet()
+        stop()
+        departure()
+        route()
+        rule()
     }
 }
 

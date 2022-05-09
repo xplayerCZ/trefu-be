@@ -5,10 +5,13 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 import java.time.LocalDate
 import java.time.LocalTime
 
-fun Route.departure(departureService: DepartureService) {
+fun Route.departure() {
+
+    val departureService: DepartureService by inject()
 
     route("/departure") {
 

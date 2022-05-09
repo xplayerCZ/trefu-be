@@ -7,8 +7,11 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
-fun Route.stop(stopService: StopService) {
+fun Route.stop() {
+
+    val stopService: StopService by inject()
 
     route("/stop") {
 
