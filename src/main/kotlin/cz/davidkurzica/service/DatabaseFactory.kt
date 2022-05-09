@@ -2,12 +2,11 @@ package cz.davidkurzica.service
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.config.*
+import io.ktor.server.config.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.slf4j.LoggerFactory
-import java.sql.Connection
 import java.sql.Connection.TRANSACTION_REPEATABLE_READ
 import java.util.*
 

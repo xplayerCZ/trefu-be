@@ -2,12 +2,12 @@ package cz.davidkurzica
 
 import cz.davidkurzica.service.*
 import cz.davidkurzica.web.*
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.serialization.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -29,6 +29,7 @@ fun Application.module() {
     val stopService = StopService()
     val departureService = DepartureService()
     val routeService = RouteService()
+    val ruleService = RuleService()
 
     install(Routing) {
         connection(connectionService)
@@ -37,6 +38,7 @@ fun Application.module() {
         stop(stopService)
         departure(departureService)
         route(routeService)
+        rule(ruleService)
     }
 }
 

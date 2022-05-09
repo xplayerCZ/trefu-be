@@ -5,10 +5,8 @@ import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.selectStopsByRouteId
 import cz.davidkurzica.util.toRoute
 import org.jetbrains.exposed.sql.ResultRow
-
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import javax.sql.RowSetMetaData
 
 class RouteService {
 

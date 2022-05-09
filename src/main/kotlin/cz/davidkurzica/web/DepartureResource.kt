@@ -1,11 +1,10 @@
 package cz.davidkurzica.web
 
 import cz.davidkurzica.service.DepartureService
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.time.LocalDate
 import java.time.LocalTime
 

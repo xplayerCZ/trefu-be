@@ -5,11 +5,11 @@ import cz.davidkurzica.model.ConnectionItemPart
 import cz.davidkurzica.model.DepartureSimple
 import cz.davidkurzica.model.NewConnection
 import cz.davidkurzica.service.ConnectionService
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.time.LocalTime
 
 fun Route.connection(connectionService: ConnectionService) {

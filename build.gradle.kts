@@ -5,12 +5,13 @@ val exposedVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.6.10"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
+    kotlin("jvm") version "1.6.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.20"
 }
 
 group = "cz.davidkurzica"
 version = "0.0.1"
+
 application {
     mainClass.set("cz.davidkurzica.ApplicationKt")
 }
@@ -20,8 +21,10 @@ repositories {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-serialization:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
@@ -32,8 +35,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
 
-    implementation("org.postgresql:postgresql:42.3.1")
-    implementation("com.zaxxer:HikariCP:5.0.0")
+    implementation("org.postgresql:postgresql:42.3.4")
+    implementation("com.zaxxer:HikariCP:5.0.1")
 
-    implementation("org.flywaydb:flyway-core:8.2.3")
+    implementation("org.flywaydb:flyway-core:8.5.10")
 }

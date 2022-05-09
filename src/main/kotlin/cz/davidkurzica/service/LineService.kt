@@ -5,7 +5,6 @@ import cz.davidkurzica.service.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.selectPacketByPacketId
 import cz.davidkurzica.util.selectRoutesByLineId
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.time.LocalDate
 
 class LineService {
