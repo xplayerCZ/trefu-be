@@ -40,7 +40,7 @@ fun Application.module() {
 
     DatabaseFactory.initDatabase(this.environment.config)
 
-    install(Routing) {
+    routing {
         connection()
         line()
         packet()
