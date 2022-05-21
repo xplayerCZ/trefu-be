@@ -1,0 +1,229 @@
+openapi: 3.1.0
+info:
+  version: '1.0.0'
+  title: 'trefu-be'
+paths:
+  /stops:
+    get:
+      summary: Returns a list of stops.
+      responses:
+        '200':
+          description: A JSON array of stops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stop'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /stops/{id}:
+    get:
+      summary: Get a single stop.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: A stop object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stop'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Stop:
+      type: object
+      required:
+        - id
+        - latitude
+        - longtitude
+        - code
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        latitude:
+          type: string
+          examples:
+            - 49.9390617N
+        longtitude:
+          type: string
+          examples:
+            - 17.9026936E
+        code:
+          type: integer
+          format: int64
+          examples:
+            - 12345
+    Route:
+      type: object
+      required:
+        - id
+        - length
+        - direction
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        length:
+          type: integer
+          format: int64
+          examples:
+            - 5
+            - 6
+        direction:
+          type: integer
+          format: int64
+          enum: [0, 1]
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stop'
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+    Line:
+      type: object
+      required:
+        - id
+        - shortCode
+        - fullCode
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        shortCode:
+          type: integer
+          format: int64
+          examples:
+            - 204
+            - 219
+        fullCode:
+          type: string
+          examples:
+            - 905201
+        routes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+    Packet:
+      type: object
+      required:
+        - id
+        - validFrom
+        - validTo
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        validFrom:
+          type: integer
+          format: int64
+        validTo:
+          type: integer
+          format: int64
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Line'
+    Connection:
+      type: object
+      required:
+        - id
+        - number
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        number:
+          type: integer
+          format: int64
+          examples:
+            - 22
+            - 25
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rule'
+        departures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Departure'
+    Rule:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        description:
+          type: string
+          examples:
+            - Is valid during weekends
+            - Is valid during weekdays
+    Departure:
+      type: object
+      required:
+        - id
+        - time
+        - stop
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        time:
+          type: integer
+          format: int64
+        stop:
+          $ref: '#/components/schemas/Stop'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          examples:
+            - 500
+        message:
+          type: string
+          examples:
+            - Something went wrong
