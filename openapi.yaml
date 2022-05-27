@@ -1,43 +1,109 @@
 openapi: 3.1.0
 info:
-  version: '1.0.0'
+  version: '1.1'
   title: 'trefu-be'
 paths:
-  /stops:
+  /packets:
     get:
-      summary: Returns a list of stops.
+      summary: Returns a list of packets
+      tags:
+        - Packets
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: The number of items to skip.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+          required: false
+          description: The number of items to return.
       responses:
         '200':
-          description: A JSON array of stops
+          description: A JSON array of packets
           content:
             application/json:
-              schema:
+              schema: 
                 type: array
-                items:
-                  $ref: '#/components/schemas/Stop'
+                items: 
+                  $ref: '#/components/schemas/Packet' 
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /stops/{id}:
-    get:
-      summary: Get a single stop.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            minimum: 1
+    post:
+      summary: Create a new packet
+      tags:
+        - Packets
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Packet' 
       responses:
-        '200':
-          description: A stop object.
+        '201':
+          description: Created packet
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Packet' 
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Stop'
+                $ref: '#/components/schemas/Error'
+  /packets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single packet by ID
+      tags:
+        - Packets
+      responses:
+        '200':
+          description: A packet object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Packet' 
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a packet by ID
+      tags:
+        - Packets
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Packet' 
+      responses:
+        '200':
+          description: An updated packet object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Packet' 
         default:
           description: Unexpected error
           content:
@@ -49,7 +115,6 @@ components:
     Stop:
       type: object
       required:
-        - id
         - latitude
         - longtitude
         - code
@@ -75,8 +140,7 @@ components:
             - 12345
     Route:
       type: object
-      required:
-        - id
+      required: 
         - length
         - direction
       properties:
@@ -85,29 +149,20 @@ components:
           format: int64
           examples:
             - 1
-            - 2
+            - 2  
         length:
           type: integer
           format: int64
           examples:
             - 5
-            - 6
+            - 6  
         direction:
           type: integer
           format: int64
           enum: [0, 1]
-        stops:
-          type: array
-          items:
-            $ref: '#/components/schemas/Stop'
-        connections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
     Line:
       type: object
       required:
-        - id
         - shortCode
         - fullCode
       properties:
@@ -127,14 +182,9 @@ components:
           type: string
           examples:
             - 905201
-        routes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Route'
     Packet:
       type: object
       required:
-        - id
         - validFrom
         - validTo
       properties:
@@ -150,14 +200,9 @@ components:
         validTo:
           type: integer
           format: int64
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/Line'
     Connection:
       type: object
       required:
-        - id
         - number
       properties:
         id:
@@ -172,14 +217,6 @@ components:
           examples:
             - 22
             - 25
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rule'
-        departures:
-          type: array
-          items:
-            $ref: '#/components/schemas/Departure'
     Rule:
       type: object
       properties:
@@ -197,9 +234,8 @@ components:
     Departure:
       type: object
       required:
-        - id
         - time
-        - stop
+        - departure
       properties:
         id:
           type: integer
@@ -210,8 +246,6 @@ components:
         time:
           type: integer
           format: int64
-        stop:
-          $ref: '#/components/schemas/Stop'
     Error:
       type: object
       required:
