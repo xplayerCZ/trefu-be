@@ -9,23 +9,8 @@ paths:
       tags:
         - Packets
       parameters:
-        - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: The number of items to skip.
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 50
-            default: 20
-          required: false
-          description: The number of items to return.
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
       responses:
         '200':
           description: A JSON array of packets
@@ -34,13 +19,11 @@ paths:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Packet' 
+                  $ref: '#/components/schemas/Packet'
+        '404':
+          $ref: '#/components/responses/404NotFound'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultResponse'
     post:
       summary: Create a new packet
       tags:
@@ -52,17 +35,17 @@ paths:
               $ref: '#/components/schemas/Packet' 
       responses:
         '201':
-          description: Created packet
+          description: Created a packet
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/Packet' 
+                $ref: '#/components/schemas/Packet'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultResponse'
   /packets/{id}:
     parameters:
       - name: id
@@ -82,12 +65,10 @@ paths:
             application/json:
               schema: 
                 $ref: '#/components/schemas/Packet' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultResponse'
     put:
       summary: Update a packet by ID
       tags:
@@ -103,13 +84,680 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/Packet' 
+                $ref: '#/components/schemas/Packet'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
         default:
-          description: Unexpected error
+          $ref: '#/components/responses/DefaultResponse'
+  /packets/{id}/lines:
+    get:
+      summary: Returns a list of lines
+      description: Returns a list of lines connected to specific packet.
+      tags:
+        - Packets
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of lines
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Packet'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /lines:
+    get:
+      summary: Returns a list of lines
+      tags:
+        - Lines
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of lines
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Line'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new line
+      tags:
+        - Lines
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Line' 
+      responses:
+        '201':
+          description: Created a line
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Line'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /lines/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single line by ID
+      tags:
+        - Lines
+      responses:
+        '200':
+          description: A line object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Line' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a line by ID
+      tags:
+        - Lines
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Line' 
+      responses:
+        '200':
+          description: An updated line object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Line'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /lines/{id}/routes:
+    get:
+      summary: Returns a list of routes
+      description: Returns a list of routes connected to specific line.
+      tags:
+        - Lines
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of routes
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Line'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /routes:
+    get:
+      summary: Returns a list of routes
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of routes
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new route
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Route' 
+      responses:
+        '201':
+          description: Created a route
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Route'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /routes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single route by ID
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: A route object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Route' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a route by ID
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Route' 
+      responses:
+        '200':
+          description: An updated route object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Route'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /routes/{id}/connections:
+    get:
+      summary: Returns a list of connections
+      description: Returns a list of connections connected to specific route.
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of connections
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /routes/{id}/stops:
+    get:
+      summary: Returns a list of stops
+      description: Returns a list of stops connected to specific route.
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of stops
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /stops:
+    get:
+      summary: Returns a list of stops
+      tags:
+        - Stops
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of stops
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Stop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new stop
+      tags:
+        - Stops
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Stop' 
+      responses:
+        '201':
+          description: Created a stop
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Stop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /stops/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single stop by ID
+      tags:
+        - Stops
+      responses:
+        '200':
+          description: A stop object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Stop' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a stop by ID
+      tags:
+        - Stops
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Stop' 
+      responses:
+        '200':
+          description: An updated stop object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Stop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /connections:
+    get:
+      summary: Returns a list of connections
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of connections
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new connection
+      tags:
+        - Connections
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Connection' 
+      responses:
+        '201':
+          description: Created a connection
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Connection'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /connections/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single connection by ID
+      tags:
+        - Connections
+      responses:
+        '200':
+          description: A connection object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Connection' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a connection by ID
+      tags:
+        - Connections
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Connection' 
+      responses:
+        '200':
+          description: An updated connection object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Connection'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /connections/{id}/departures:
+    get:
+      summary: Returns a list of departures
+      description: Returns a list of departures connected to specific connection.
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of departures
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /connections/{id}/rules:
+    get:
+      summary: Returns a list of rules
+      description: Returns a list of rules connected to specific connection.
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of rules
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /departures:
+    get:
+      summary: Returns a list of departures
+      tags:
+        - Departures
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of departures
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Departure'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new departure
+      tags:
+        - Departures
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Departure' 
+      responses:
+        '201':
+          description: Created a departure
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Departure'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /departures/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single departure by ID
+      tags:
+        - Departures
+      responses:
+        '200':
+          description: A departure object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Departure' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a departure by ID
+      tags:
+        - Departures
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Departure' 
+      responses:
+        '200':
+          description: An updated departure object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Departure'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /rules:
+    get:
+      summary: Returns a list of rules
+      tags:
+        - Rules
+      parameters:
+        - $ref: '#/components/schemas/offsetParam'
+        - $ref: '#/components/schemas/limitParam'
+      responses:
+        '200':
+          description: A JSON array of rules
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Rule'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    post:
+      summary: Create a new rule
+      tags:
+        - Rules
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Rule' 
+      responses:
+        '201':
+          description: Created a rule
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Rule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'        
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+  /rules/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single rule by ID
+      tags:
+        - Rules
+      responses:
+        '200':
+          description: A rule object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Rule' 
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+    put:
+      summary: Update a rule by ID
+      tags:
+        - Rules
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/Rule' 
+      responses:
+        '200':
+          description: An updated rule object
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Rule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'         
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+
 components:
   schemas:
     Stop:
@@ -261,3 +909,45 @@ components:
           type: string
           examples:
             - Something went wrong
+
+  parameters:
+    idParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  responses:
+    400BadRequest:
+      description: The request was in incorrect format.
+    404NotFound:
+      description: The specified resource was not found.
+    GenericError:
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
