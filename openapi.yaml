@@ -9,8 +9,8 @@ paths:
       tags:
         - Packets
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of packets
@@ -23,7 +23,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new packet
       tags:
@@ -45,7 +45,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /packets/{id}:
     parameters:
       - name: id
@@ -68,7 +68,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a packet by ID
       tags:
@@ -90,7 +90,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /packets/{id}/lines:
     get:
       summary: Returns a list of lines
@@ -113,15 +113,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /lines:
     get:
       summary: Returns a list of lines
       tags:
         - Lines
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of lines
@@ -134,7 +134,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new line
       tags:
@@ -156,7 +156,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /lines/{id}:
     parameters:
       - name: id
@@ -179,7 +179,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a line by ID
       tags:
@@ -201,7 +201,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /lines/{id}/routes:
     get:
       summary: Returns a list of routes
@@ -224,15 +224,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /routes:
     get:
       summary: Returns a list of routes
       tags:
         - Routes
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of routes
@@ -245,7 +245,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new route
       tags:
@@ -267,7 +267,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /routes/{id}:
     parameters:
       - name: id
@@ -290,7 +290,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a route by ID
       tags:
@@ -312,7 +312,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /routes/{id}/connections:
     get:
       summary: Returns a list of connections
@@ -335,7 +335,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /routes/{id}/stops:
     get:
       summary: Returns a list of stops
@@ -358,15 +358,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /stops:
     get:
       summary: Returns a list of stops
       tags:
         - Stops
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of stops
@@ -379,7 +379,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new stop
       tags:
@@ -401,7 +401,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /stops/{id}:
     parameters:
       - name: id
@@ -424,7 +424,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a stop by ID
       tags:
@@ -446,15 +446,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /connections:
     get:
       summary: Returns a list of connections
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of connections
@@ -467,7 +467,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new connection
       tags:
@@ -489,7 +489,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /connections/{id}:
     parameters:
       - name: id
@@ -512,7 +512,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a connection by ID
       tags:
@@ -534,7 +534,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /connections/{id}/departures:
     get:
       summary: Returns a list of departures
@@ -557,7 +557,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /connections/{id}/rules:
     get:
       summary: Returns a list of rules
@@ -580,15 +580,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /departures:
     get:
       summary: Returns a list of departures
       tags:
         - Departures
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of departures
@@ -601,7 +601,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new departure
       tags:
@@ -623,7 +623,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /departures/{id}:
     parameters:
       - name: id
@@ -646,7 +646,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a departure by ID
       tags:
@@ -668,15 +668,15 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /rules:
     get:
       summary: Returns a list of rules
       tags:
         - Rules
       parameters:
-        - $ref: '#/components/schemas/offsetParam'
-        - $ref: '#/components/schemas/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: A JSON array of rules
@@ -689,7 +689,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     post:
       summary: Create a new rule
       tags:
@@ -711,7 +711,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'        
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
   /rules/{id}:
     parameters:
       - name: id
@@ -734,7 +734,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
     put:
       summary: Update a rule by ID
       tags:
@@ -756,7 +756,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
-          $ref: '#/components/responses/DefaultResponse'
+          $ref: '#/components/responses/GeneralError'
 
 components:
   schemas:
@@ -945,7 +945,7 @@ components:
       description: The request was in incorrect format.
     404NotFound:
       description: The specified resource was not found.
-    GenericError:
+    GeneralError:
       description: An error occurred.
       content:
         application/json:
