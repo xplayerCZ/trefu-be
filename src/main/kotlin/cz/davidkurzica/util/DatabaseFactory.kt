@@ -1,4 +1,4 @@
-package cz.davidkurzica.service
+package cz.davidkurzica.util
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

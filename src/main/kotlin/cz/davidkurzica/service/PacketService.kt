@@ -3,7 +3,7 @@ package cz.davidkurzica.service
 import cz.davidkurzica.model.NewPacket
 import cz.davidkurzica.model.Packet
 import cz.davidkurzica.model.Packets
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -15,7 +15,7 @@ class PacketService {
         Packets.selectAll().mapNotNull { toPacket(it) }
     }
 
-    suspend fun getPacket(id: Int): Packet? = dbQuery {
+    private suspend fun getPacket(id: Int): Packet? = dbQuery {
         Packets.select {
             (Packets.id eq id)
         }.mapNotNull { toPacket(it) }

@@ -1,12 +1,14 @@
 package cz.davidkurzica
 
 import cz.davidkurzica.service.*
+import cz.davidkurzica.util.DatabaseFactory
 import cz.davidkurzica.web.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.resources.Resources
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
@@ -27,12 +29,14 @@ val koinModule = module {
 
 fun Application.module() {
     install(CallLogging)
+    install(Resources)
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true
             isLenient = true
         })
     }
+
     install(Koin) {
         slf4jLogger()
         modules(koinModule)

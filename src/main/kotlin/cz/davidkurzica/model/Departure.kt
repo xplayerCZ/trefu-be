@@ -1,10 +1,5 @@
 package cz.davidkurzica.model
 
-import cz.davidkurzica.model.Connections.autoIncrement
-import cz.davidkurzica.model.Connections.references
-import cz.davidkurzica.model.Departures.autoIncrement
-import cz.davidkurzica.model.Departures.nullable
-import cz.davidkurzica.model.Departures.references
 import cz.davidkurzica.util.LocalDateSerializer
 import cz.davidkurzica.util.LocalTimeSerializer
 import kotlinx.serialization.Serializable

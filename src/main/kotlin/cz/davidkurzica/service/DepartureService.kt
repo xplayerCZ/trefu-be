@@ -1,7 +1,7 @@
 package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.selectLineShortCodeByLineId
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and

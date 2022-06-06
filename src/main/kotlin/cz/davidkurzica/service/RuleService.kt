@@ -3,14 +3,14 @@ package cz.davidkurzica.service
 import cz.davidkurzica.model.NewRule
 import cz.davidkurzica.model.Rule
 import cz.davidkurzica.model.Rules
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
 class RuleService {
 
-    suspend fun getRule(id: Int): Rule? = dbQuery {
+    private suspend fun getRule(id: Int): Rule? = dbQuery {
         Rules.select {
             (Rules.id eq id)
         }.mapNotNull { toRule(it) }

@@ -2,7 +2,6 @@ package cz.davidkurzica.util
 
 import cz.davidkurzica.model.*
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.select
 
 fun selectStopsByRouteId(routeId: Int): List<Stop> {

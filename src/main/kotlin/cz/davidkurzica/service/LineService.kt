@@ -1,7 +1,7 @@
 package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.selectPacketByPacketId
 import cz.davidkurzica.util.selectRoutesByLineId
 import org.jetbrains.exposed.sql.*
@@ -13,7 +13,7 @@ class LineService {
         Lines.selectAll().mapNotNull { toLine(it) }
     }
 
-    suspend fun getLine(id: Int): Line? = dbQuery {
+    private suspend fun getLine(id: Int): Line? = dbQuery {
         Lines.select {
             (Lines.id eq id)
         }.mapNotNull { toLine(it) }

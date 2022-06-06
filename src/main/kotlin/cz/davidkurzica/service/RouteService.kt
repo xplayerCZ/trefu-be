@@ -1,7 +1,7 @@
 package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.selectStopsByRouteId
 import cz.davidkurzica.util.toRoute
 import org.jetbrains.exposed.sql.ResultRow
@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.select
 
 class RouteService {
 
-    suspend fun getRoute(id: Int): Route? = dbQuery {
+    private suspend fun getRoute(id: Int): Route? = dbQuery {
         Routes.select {
             (Routes.id eq id)
         }.mapNotNull { toRoute(it) }
@@ -47,7 +47,7 @@ class RouteService {
         return getRoute(key)!!
     }
 
-    fun toDirection(row: ResultRow): Direction {
+    private fun toDirection(row: ResultRow): Direction {
         val stops = selectStopsByRouteId(row[Routes.id])
         return Direction(
             id = row[Routes.direction],

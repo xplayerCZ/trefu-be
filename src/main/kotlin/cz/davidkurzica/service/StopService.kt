@@ -4,7 +4,7 @@ import cz.davidkurzica.model.NewStop
 import cz.davidkurzica.model.Stop
 import cz.davidkurzica.model.StopItem
 import cz.davidkurzica.model.Stops
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -23,7 +23,7 @@ class StopService {
         Stops.selectAll().mapNotNull { toStop(it) }
     }
 
-    suspend fun getStop(id: Int): Stop? = dbQuery {
+    private suspend fun getStop(id: Int): Stop? = dbQuery {
         Stops.select {
             (Stops.id eq id)
         }.mapNotNull { toStop(it) }
