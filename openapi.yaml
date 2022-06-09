@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   version: '1.1'
   title: 'trefu-be'
@@ -16,9 +16,9 @@ paths:
           description: A JSON array of packets
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Packet'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -31,19 +31,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Packet' 
+            schema:
+              $ref: '#/components/schemas/Packet'
       responses:
         '201':
           description: Created a packet
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Packet'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /packets/{id}:
@@ -63,8 +63,8 @@ paths:
           description: A packet object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Packet' 
+              schema:
+                $ref: '#/components/schemas/Packet'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -76,17 +76,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Packet' 
+            schema:
+              $ref: '#/components/schemas/Packet'
       responses:
         '200':
           description: An updated packet object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Packet'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -106,9 +106,9 @@ paths:
           description: A JSON array of lines
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Packet'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -127,9 +127,9 @@ paths:
           description: A JSON array of lines
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Line'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -142,19 +142,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Line' 
+            schema:
+              $ref: '#/components/schemas/Line'
       responses:
         '201':
           description: Created a line
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Line'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /lines/{id}:
@@ -174,8 +174,8 @@ paths:
           description: A line object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Line' 
+              schema:
+                $ref: '#/components/schemas/Line'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -187,17 +187,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Line' 
+            schema:
+              $ref: '#/components/schemas/Line'
       responses:
         '200':
           description: An updated line object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Line'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -217,9 +217,9 @@ paths:
           description: A JSON array of routes
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Line'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -238,9 +238,9 @@ paths:
           description: A JSON array of routes
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Route'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -253,19 +253,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Route' 
+            schema:
+              $ref: '#/components/schemas/Route'
       responses:
         '201':
           description: Created a route
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /routes/{id}:
@@ -285,8 +285,8 @@ paths:
           description: A route object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Route' 
+              schema:
+                $ref: '#/components/schemas/Route'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -298,17 +298,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Route' 
+            schema:
+              $ref: '#/components/schemas/Route'
       responses:
         '200':
           description: An updated route object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -328,9 +328,9 @@ paths:
           description: A JSON array of connections
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Route'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -351,9 +351,9 @@ paths:
           description: A JSON array of stops
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Route'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -372,9 +372,9 @@ paths:
           description: A JSON array of stops
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Stop'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -387,19 +387,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Stop' 
+            schema:
+              $ref: '#/components/schemas/Stop'
       responses:
         '201':
           description: Created a stop
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Stop'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /stops/{id}:
@@ -419,8 +419,8 @@ paths:
           description: A stop object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Stop' 
+              schema:
+                $ref: '#/components/schemas/Stop'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -432,17 +432,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Stop' 
+            schema:
+              $ref: '#/components/schemas/Stop'
       responses:
         '200':
           description: An updated stop object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Stop'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -460,9 +460,9 @@ paths:
           description: A JSON array of connections
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Connection'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -475,19 +475,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Connection' 
+            schema:
+              $ref: '#/components/schemas/Connection'
       responses:
         '201':
           description: Created a connection
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Connection'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /connections/{id}:
@@ -507,8 +507,8 @@ paths:
           description: A connection object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Connection' 
+              schema:
+                $ref: '#/components/schemas/Connection'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -520,17 +520,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Connection' 
+            schema:
+              $ref: '#/components/schemas/Connection'
       responses:
         '200':
           description: An updated connection object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Connection'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -550,9 +550,9 @@ paths:
           description: A JSON array of departures
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Connection'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -573,9 +573,9 @@ paths:
           description: A JSON array of rules
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Connection'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -594,9 +594,9 @@ paths:
           description: A JSON array of departures
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Departure'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -609,19 +609,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Departure' 
+            schema:
+              $ref: '#/components/schemas/Departure'
       responses:
         '201':
           description: Created a departure
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Departure'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /departures/{id}:
@@ -641,8 +641,8 @@ paths:
           description: A departure object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Departure' 
+              schema:
+                $ref: '#/components/schemas/Departure'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -654,17 +654,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Departure' 
+            schema:
+              $ref: '#/components/schemas/Departure'
       responses:
         '200':
           description: An updated departure object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Departure'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -682,9 +682,9 @@ paths:
           description: A JSON array of rules
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
+                items:
                   $ref: '#/components/schemas/Rule'
         '404':
           $ref: '#/components/responses/404NotFound'
@@ -697,19 +697,19 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Rule' 
+            schema:
+              $ref: '#/components/schemas/Rule'
       responses:
         '201':
           description: Created a rule
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Rule'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/404NotFound'        
+          $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
   /rules/{id}:
@@ -729,8 +729,8 @@ paths:
           description: A rule object
           content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/Rule' 
+              schema:
+                $ref: '#/components/schemas/Rule'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -742,17 +742,17 @@ paths:
       requestBody:
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/Rule' 
+            schema:
+              $ref: '#/components/schemas/Rule'
       responses:
         '200':
           description: An updated rule object
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Rule'
         '400':
-          $ref: '#/components/responses/400BadRequest'         
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -788,7 +788,8 @@ components:
             - 12345
     Route:
       type: object
-      required: 
+      required:
+        - lineId
         - length
         - direction
       properties:
@@ -797,24 +798,66 @@ components:
           format: int64
           examples:
             - 1
-            - 2  
+            - 2
+        lineId:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
         length:
           type: integer
           format: int64
           examples:
             - 5
-            - 6  
+            - 6
         direction:
           type: integer
           format: int64
           enum: [0, 1]
+    RouteStops:
+      type: object
+      required:
+        - routeId
+        - stopId
+      properties:
+        routeId:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        stopId:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        index:
+          type: integer
+          format: int64
+          examples:
+            - 5
+            - 6
+        served:
+          type: boolean
+          examples:
+            - true
+            - false
     Line:
       type: object
       required:
+        - packetId
         - shortCode
         - fullCode
       properties:
         id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        packetId:
           type: integer
           format: int64
           examples:
@@ -851,9 +894,16 @@ components:
     Connection:
       type: object
       required:
+        - routeId
         - number
       properties:
         id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        routeId:
           type: integer
           format: int64
           examples:
@@ -865,6 +915,24 @@ components:
           examples:
             - 22
             - 25
+    ConnectionRules:
+      type: object
+      required:
+        - connectionId
+        - ruleId
+      properties:
+        connectionId:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        ruleId:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
     Rule:
       type: object
       properties:
@@ -882,10 +950,17 @@ components:
     Departure:
       type: object
       required:
+        - connectionId
         - time
         - departure
       properties:
         id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+            - 2
+        connectionId:
           type: integer
           format: int64
           examples:
