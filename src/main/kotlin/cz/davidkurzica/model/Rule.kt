@@ -11,14 +11,12 @@ object Rules: Table() {
 }
 
 @Serializable
-class NewRule(
-    val id: Int,
-    val description: String
-)
-
-@Serializable
 class Rule(
     val id: Int,
     val description: String
 )
 
+@Serializable
+class NewRule(
+    val description: String
+)

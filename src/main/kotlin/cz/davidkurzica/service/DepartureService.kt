@@ -2,15 +2,63 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.selectLineShortCodeByLineId
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.*
+import org.jetbrains.exposed.sql.*
 
 class DepartureService {
+    
+    suspend fun getDepartures(
+        offset: Int?,
+        limit: Int?
+    ) = dbQuery {
+        val query = Departures.selectAll()
+
+        limit?.let {
+            query.limit(limit, (offset ?: 0).toLong())
+        }
+
+        query.mapNotNull { toDeparture(it) }
+    }
+
+    suspend fun getDepartureById(id: Int): Departure? = dbQuery {
+        Departures.select {
+            (Departures.id eq id)
+        }.mapNotNull { toDeparture(it) }
+            .singleOrNull()
+    }
+
+    suspend fun addDeparture(departure: NewDeparture): Departure {
+        var key = 0
+        dbQuery {
+            key = (Departures.insert {
+                it[connectionId] = departure.connectionId
+                it[time] = departure.time
+                it[index] = departure.index
+            } get Departures.id)
+        }
+        return getDepartureById(key)!!
+    }
+
+    suspend fun editDeparture(departure: NewDeparture, id: Int): Departure {
+        dbQuery {
+            Departures.update({Departures.id eq id}) {
+                it[connectionId] = departure.connectionId
+                it[time] = departure.time
+                it[index] = departure.index
+            }
+        }
+        return getDepartureById(id)!!
+    }
+
+    fun toDeparture(row: ResultRow) =
+        Departure(
+            id = row[Departures.id],
+            connectionId = row[Departures.connectionId],
+            time = row[Departures.time],
+            index = row[Departures.index]
+        )
+    
+    /*
+
     suspend fun get(time: LocalTime, stopId: Int, date: LocalDate) = dbQuery {
         (Departures innerJoin Connections innerJoin Routes innerJoin RouteStops innerJoin Lines innerJoin Packets innerJoin ConnectionRules)
             .slice(Lines.shortCode, Departures.time, Routes.length, Routes.id)
@@ -83,6 +131,7 @@ class DepartureService {
             stopName = getLastStopName(row[Routes.id], row[Routes.length] - 1)
         )
     }
+     */
 }
 
 

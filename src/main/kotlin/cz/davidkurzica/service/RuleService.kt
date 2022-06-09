@@ -1,16 +1,25 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.NewRule
-import cz.davidkurzica.model.Rule
-import cz.davidkurzica.model.Rules
+import cz.davidkurzica.model.*
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 
 class RuleService {
 
-    private suspend fun getRule(id: Int): Rule? = dbQuery {
+    suspend fun getRules(
+        offset: Int?,
+        limit: Int?
+    ) = dbQuery {
+        val query = Rules.selectAll()
+
+        limit?.let {
+            query.limit(limit, (offset ?: 0).toLong())
+        }
+
+        query.mapNotNull { toRule(it) }
+    }
+    
+    suspend fun getRuleById(id: Int): Rule? = dbQuery {
         Rules.select {
             (Rules.id eq id)
         }.mapNotNull { toRule(it) }
@@ -21,14 +30,22 @@ class RuleService {
         var key = 0
         dbQuery {
             key = (Rules.insert {
-                it[id] = rule.id
                 it[description] = rule.description
             } get Rules.id)
         }
-        return getRule(key)!!
+        return getRuleById(key)!!
     }
 
-    private fun toRule(row: ResultRow): Rule =
+    suspend fun editRule(rule: NewRule, id: Int): Rule {
+        dbQuery {
+            Rules.update({Rules.id eq id}) {
+                it[description] = rule.description
+            }
+        }
+        return getRuleById(id)!!
+    }
+
+    fun toRule(row: ResultRow): Rule =
         Rule(
             id = row[Rules.id],
             description = row[Rules.description],

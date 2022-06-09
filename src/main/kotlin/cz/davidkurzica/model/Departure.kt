@@ -21,6 +21,14 @@ object Departures: Table() {
 @Serializable
 class Departure(
     val id: Int,
+    val connectionId: Int,
+    val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
+    val index: Int
+)
+
+@Serializable
+class NewDeparture(
+    val connectionId: Int,
     val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
     val index: Int
 )

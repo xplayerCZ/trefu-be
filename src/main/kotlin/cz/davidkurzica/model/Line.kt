@@ -13,20 +13,20 @@ object Lines : Table() {
 }
 
 @Serializable
+class Line(
+    val id: Int,
+    val shortCode: String,
+    val fullCode: Int,
+    val packetId: Int,
+)
+
+@Serializable
 class NewLine(
     val shortCode: String,
     val fullCode: Int,
     val packetId: Int
 )
 
-@Serializable
-class Line(
-    val id: Int,
-    val shortCode: String,
-    val fullCode: Int,
-    val packet: Packet,
-    val routes: List<Route>
-)
 
 @Serializable
 class LineItem(

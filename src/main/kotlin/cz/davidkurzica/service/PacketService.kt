@@ -4,18 +4,24 @@ import cz.davidkurzica.model.NewPacket
 import cz.davidkurzica.model.Packet
 import cz.davidkurzica.model.Packets
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class PacketService {
 
-    suspend fun getAll() = dbQuery {
-        Packets.selectAll().mapNotNull { toPacket(it) }
+    suspend fun getPackets(
+        offset: Int?,
+        limit: Int?
+    ) = dbQuery {
+        val query = Packets.selectAll()
+
+        limit?.let {
+            query.limit(limit, (offset ?: 0).toLong())
+        }
+
+        query.mapNotNull { toPacket(it) }
     }
 
-    private suspend fun getPacket(id: Int): Packet? = dbQuery {
+    suspend fun getPacketById(id: Int): Packet? = dbQuery {
         Packets.select {
             (Packets.id eq id)
         }.mapNotNull { toPacket(it) }
@@ -26,16 +32,26 @@ class PacketService {
         var key = 0
         dbQuery {
             key = (Packets.insert {
-                it[id] = packet.id
                 it[from] = packet.from
                 it[to] = packet.to
                 it[valid] = packet.valid
             } get Packets.id)
         }
-        return getPacket(key)!!
+        return getPacketById(key)!!
     }
 
-    private fun toPacket(row: ResultRow): Packet =
+    suspend fun editPacket(packet: NewPacket, id: Int): Packet {
+        dbQuery {
+            Packets.update({Packets.id eq id}) {
+                it[from] = packet.from
+                it[to] = packet.to
+                it[valid] = packet.valid
+            }
+        }
+        return getPacketById(id)!!
+    }
+
+    fun toPacket(row: ResultRow): Packet =
         Packet(
             id = row[Packets.id],
             from = row[Packets.from],

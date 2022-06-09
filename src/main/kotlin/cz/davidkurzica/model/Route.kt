@@ -21,22 +21,21 @@ object RouteStops : Table("route_stops") {
     override val primaryKey = PrimaryKey(stopId, routeId, index, name = "PK_RouteStops")
 }
 
-//Route interface is responsible for RouteStop entries
-@Serializable
-class NewRoute(
-    val direction: Int,
-    val stopIds: List<Int>,
-    val servedStopsIds:  List<Int>,
-    val lineId: Int
-)
-
 @Serializable
 class Route(
     val id: Int,
+    val lineId: Int,
     val length: Int,
-    val direction: Int,
-    val stops: List<Stop>,
+    val direction: Int
 )
+
+@Serializable
+class NewRoute(
+    val lineId: Int,
+    val length: Int,
+    val direction: Int
+)
+
 
 @Serializable
 class Direction(

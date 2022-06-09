@@ -2,28 +2,26 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.NewStop
 import cz.davidkurzica.model.Stop
-import cz.davidkurzica.model.StopItem
 import cz.davidkurzica.model.Stops
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class StopService {
 
-    suspend fun getAllDetail(): List<StopItem> = dbQuery {
-        Stops
-            .slice(Stops.id, Stops.name)
-            .selectAll()
-            .mapNotNull { toStopItem(it) }
+    suspend fun getStops(
+        offset: Int?,
+        limit: Int?
+    ) = dbQuery {
+        val query = Stops.selectAll()
+
+        limit?.let {
+            query.limit(limit, (offset ?: 0).toLong())
+        }
+
+        query.mapNotNull { toStop(it) }
     }
 
-    suspend fun getAll(): List<Stop> = dbQuery {
-        Stops.selectAll().mapNotNull { toStop(it) }
-    }
-
-    private suspend fun getStop(id: Int): Stop? = dbQuery {
+    suspend fun getStopById(id: Int): Stop? = dbQuery {
         Stops.select {
             (Stops.id eq id)
         }.mapNotNull { toStop(it) }
@@ -41,7 +39,20 @@ class StopService {
                 it[code] = stop.code
             } get Stops.id)
         }
-        return getStop(key)!!
+        return getStopById(key)!!
+    }
+
+    suspend fun editStop(stop: NewStop, id: Int): Stop {
+        dbQuery {
+            Stops.update({Stops.id eq id}) {
+                it[Stops.id] = stop.id
+                it[name] = stop.name
+                it[latitude] = stop.latitude
+                it[longitude] = stop.longitude
+                it[code] = stop.code
+            }
+        }
+        return getStopById(id)!!
     }
 
     private fun toStop(row: ResultRow): Stop =
@@ -53,10 +64,21 @@ class StopService {
             code = row[Stops.code]
         )
 
+    /*
+    
+    suspend fun getAllDetail(): List<StopItem> = dbQuery {
+        Stops
+            .slice(Stops.id, Stops.name)
+            .selectAll()
+            .mapNotNull { toStopItem(it) }
+    }
+    
     private fun toStopItem(row: ResultRow): StopItem =
         StopItem(
             id = row[Stops.id],
             name = row[Stops.name],
             enabled = true
         )
+        
+     */
 }

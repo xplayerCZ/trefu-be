@@ -14,7 +14,7 @@ object Stops : Table() {
 }
 
 @Serializable
-class NewStop(
+class Stop(
     val id: Int,
     val name: String,
     val latitude: String,
@@ -23,7 +23,7 @@ class NewStop(
 )
 
 @Serializable
-class Stop(
+class NewStop(
     val id: Int,
     val name: String,
     val latitude: String,

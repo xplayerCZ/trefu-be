@@ -1,9 +1,7 @@
 package cz.davidkurzica.model
 
-import cz.davidkurzica.util.LocalTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
-import java.time.LocalTime
 
 object Connections: Table() {
     val id = integer("connection_id").autoIncrement()
@@ -20,22 +18,17 @@ object ConnectionRules: Table("connection_rules") {
     override val primaryKey = PrimaryKey(connectionId, ruleId, name = "PK_Timetables")
 }
 
-//Connection interface is responsible for Departures and ConnectionRules entries
+@Serializable
+class Connection(
+    val id: Int,
+    val routeId: Int,
+    val number: Int,
+)
+
 @Serializable
 class NewConnection(
     val routeId: Int,
     val number: Int,
-    val departureTimes: List<@Serializable(with = LocalTimeSerializer::class) LocalTime?>,
-    val ruleIds: List<Int>
-)
-
-@Serializable
-class Connection(
-    val id: Int,
-    val route: Route,
-    val number: Int,
-    val departures: List<Departure>,
-    val rules: List<Rule>
 )
 
 @Serializable

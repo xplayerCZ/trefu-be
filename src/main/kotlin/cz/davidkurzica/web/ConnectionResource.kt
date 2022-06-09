@@ -23,8 +23,12 @@ class Connections(val offset: Int? = 0, val limit: Int? = 20)
 class ConnectionById(val id: Int) {
 
     @Serializable
-    @Resource("/lines")
-    class Lines(val parent: ConnectionById, val offset: Int? = 0, val limit: Int? = 20)
+    @Resource("/departures")
+    class Departures(val parent: ConnectionById, val offset: Int? = 0, val limit: Int? = 20)
+
+    @Serializable
+    @Resource("/rules")
+    class Rules(val parent: ConnectionById, val offset: Int? = 0, val limit: Int? = 20)
 }
 
 fun Route.connection() {
@@ -32,7 +36,7 @@ fun Route.connection() {
     val connectionService: ConnectionService by inject()
 
     get<Connections> {
-        call.respond(connectionService.filterConnections(
+        call.respond(connectionService.getConnections(
             offset = it.offset,
             limit = it.limit
         ))
@@ -43,7 +47,7 @@ fun Route.connection() {
             val connection = call.receive<NewConnection>()
             connectionService.addConnection(connection)
             call.respondText("Connection stored correctly", status = HttpStatusCode.Created)
-        } catch (e: Exception) {
+        } catch (e: ContentTransformationException) {
             call.respondText("Connection is in wrong format", status = HttpStatusCode.BadRequest)
         }
     }
@@ -62,12 +66,16 @@ fun Route.connection() {
             val connection = call.receive<NewConnection>()
             connectionService.editConnection(connection, it.id)
             call.respondText("Connection with id ${it.id} updated correctly", status = HttpStatusCode.OK)
-        } catch (e: Exception) {
+        } catch (e: ContentTransformationException) {
             call.respondText("Connection is in wrong format", status = HttpStatusCode.BadRequest)
         }
     }
 
-    get <ConnectionById.Lines> {
+    get <ConnectionById.Departures> {
+        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+    }
+
+    get <ConnectionById.Rules> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }

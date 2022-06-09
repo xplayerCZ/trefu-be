@@ -2,15 +2,11 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.toConnection
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.*
 
 class ConnectionService {
 
-    suspend fun filterConnections(
+    suspend fun getConnections(
         offset: Int?,
         limit: Int?
     ) = dbQuery {
@@ -38,23 +34,6 @@ class ConnectionService {
                 it[number] = connection.number
             } get Connections.id)
         }
-        dbQuery {
-            connection.departureTimes.forEachIndexed { _index, departureTime ->
-                Departures.insert {
-                    it[connectionId] = key
-                    it[time] = departureTime
-                    it[index] = _index
-                }
-            }
-        }
-        dbQuery {
-            connection.ruleIds.forEach { _ruleId ->
-                ConnectionRules.insert {
-                    it[connectionId] = key
-                    it[ruleId] = _ruleId
-                }
-            }
-        }
         return getConnectionById(key)!!
     }
 
@@ -67,4 +46,11 @@ class ConnectionService {
         }
         return getConnectionById(id)!!
     }
+
+    fun toConnection(row: ResultRow) =
+        Connection(
+            id = row[Connections.id],
+            routeId = row[Connections.routeId],
+            number = row[Connections.number]
+        )
 }

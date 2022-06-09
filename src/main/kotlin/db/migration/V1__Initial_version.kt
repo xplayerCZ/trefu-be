@@ -7,6 +7,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
+@Suppress("ClassName")
 class V1__Initial_version: BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
