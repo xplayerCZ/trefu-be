@@ -32,10 +32,12 @@ fun Route.line() {
     val lineService: LineService by inject()
 
     get<Lines> {
-        call.respond(lineService.getLines(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            lineService.getLines(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Lines> {
@@ -67,7 +69,7 @@ fun Route.line() {
         }
     }
 
-    get <LineById.Routes> {
+    get<LineById.Routes> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }

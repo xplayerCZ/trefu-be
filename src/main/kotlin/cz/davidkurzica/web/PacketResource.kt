@@ -32,10 +32,12 @@ fun Route.packet() {
     val packetService: PacketService by inject()
 
     get<Packets> {
-        call.respond(packetService.getPackets(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            packetService.getPackets(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Packets> {
@@ -67,7 +69,7 @@ fun Route.packet() {
         }
     }
 
-    get <PacketById.Lines> {
+    get<PacketById.Lines> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }

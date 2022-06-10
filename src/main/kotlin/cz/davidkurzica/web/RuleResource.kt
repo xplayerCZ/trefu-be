@@ -27,10 +27,12 @@ fun Route.rule() {
     val ruleService: RuleService by inject()
 
     get<Rules> {
-        call.respond(ruleService.getRules(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            ruleService.getRules(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Rules> {

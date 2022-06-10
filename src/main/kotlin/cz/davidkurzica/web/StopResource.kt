@@ -27,10 +27,12 @@ fun Route.stop() {
     val stopService: StopService by inject()
 
     get<Stops> {
-        call.respond(stopService.getStops(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            stopService.getStops(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Stops> {

@@ -27,10 +27,12 @@ fun Route.departure() {
     val departureService: DepartureService by inject()
 
     get<Departures> {
-        call.respond(departureService.getDepartures(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            departureService.getDepartures(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Departures> {

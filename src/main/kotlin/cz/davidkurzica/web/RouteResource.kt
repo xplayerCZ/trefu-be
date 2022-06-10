@@ -36,10 +36,12 @@ fun Route.route() {
     val routeService: RouteService by inject()
 
     get<Routes> {
-        call.respond(routeService.getRoutes(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            routeService.getRoutes(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Routes> {
@@ -71,11 +73,11 @@ fun Route.route() {
         }
     }
 
-    get <RouteById.Connections> {
+    get<RouteById.Connections> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 
-    get <RouteById.Routes> {
+    get<RouteById.Routes> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }

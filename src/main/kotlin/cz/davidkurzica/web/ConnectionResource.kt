@@ -36,10 +36,12 @@ fun Route.connection() {
     val connectionService: ConnectionService by inject()
 
     get<Connections> {
-        call.respond(connectionService.getConnections(
-            offset = it.offset,
-            limit = it.limit
-        ))
+        call.respond(
+            connectionService.getConnections(
+                offset = it.offset,
+                limit = it.limit
+            )
+        )
     }
 
     post<Connections> {
@@ -71,11 +73,11 @@ fun Route.connection() {
         }
     }
 
-    get <ConnectionById.Departures> {
+    get<ConnectionById.Departures> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 
-    get <ConnectionById.Rules> {
+    get<ConnectionById.Rules> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }
