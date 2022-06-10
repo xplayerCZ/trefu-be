@@ -359,6 +359,67 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+  /route-stops:
+    get:
+      summary: Returns a list of route-stop relations
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - name: routeId
+          in: query
+          description: Route ID in the route-stop relation
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: stopId
+          in: query
+          description: Stop ID in the route-stop relation
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: A JSON array of route-stops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteStop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new route-stop relation
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteStop'
+      responses:
+        '201':
+          description: Created a route-stop relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
   /stops:
     get:
       summary: Returns a list of stops
@@ -577,6 +638,67 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connection-rules:
+    get:
+      summary: Returns a list of connection-rule relations
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - name: connectionId
+          in: query
+          description: Connection ID in the connection-rule relation
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: ruleId
+          in: query
+          description: Rule ID in the connection-rule relation
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: A JSON array of connection-rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectionRule'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new connection-rule relation
+      tags:
+        - Connections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRule'
+      responses:
+        '201':
+          description: Created a connection-rule relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionRule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -815,7 +937,7 @@ components:
           type: integer
           format: int64
           enum: [0, 1]
-    RouteStops:
+    RouteStop:
       type: object
       required:
         - routeId
@@ -915,7 +1037,7 @@ components:
           examples:
             - 22
             - 25
-    ConnectionRules:
+    ConnectionRule:
       type: object
       required:
         - connectionId
