@@ -19,11 +19,13 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 val koinModule = module {
     single { ConnectionService() }
+    single { ConnectionRuleService() }
     single { LineService() }
     single { PacketService() }
     single { StopService() }
     single { DepartureService() }
     single { RouteService() }
+    single { RouteStopService() }
     single { RuleService() }
 }
 
@@ -46,11 +48,13 @@ fun Application.module() {
 
     routing {
         connection()
+        connectionRule()
         line()
         packet()
         stop()
         departure()
         route()
+        routeStop()
         rule()
     }
 }

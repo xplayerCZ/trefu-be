@@ -6,8 +6,8 @@ val koinVersion: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.6.20"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.20"
+    kotlin("jvm") version "1.7.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0"
 }
 
 group = "cz.davidkurzica"
@@ -27,8 +27,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-server-resources:$ktorVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
-    implementation("io.ktor:ktor-server-core-jvm:2.0.2")
-    implementation("io.ktor:ktor-server-netty-jvm:2.0.2")
+    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
@@ -43,5 +43,5 @@ dependencies {
 
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
-    testImplementation("io.ktor:ktor-server-tests-jvm:2.0.2")
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
 }
