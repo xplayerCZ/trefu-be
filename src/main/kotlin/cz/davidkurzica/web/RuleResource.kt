@@ -1,18 +1,18 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.service.RuleService
 import cz.davidkurzica.model.NewRule
+import cz.davidkurzica.service.RuleService
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.put
 import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import kotlinx.serialization.*
 
 @Serializable
 @Resource("/rules")
@@ -38,8 +38,10 @@ fun Route.rule() {
     post<Rules> {
         try {
             val rule = call.receive<NewRule>()
-            ruleService.addRule(rule)
-            call.respondText("Rule stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = ruleService.addRule(rule),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("Rule is in wrong format", status = HttpStatusCode.BadRequest)
         }

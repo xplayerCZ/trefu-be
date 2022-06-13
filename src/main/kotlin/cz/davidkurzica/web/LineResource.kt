@@ -1,18 +1,18 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.service.LineService
 import cz.davidkurzica.model.NewLine
+import cz.davidkurzica.service.LineService
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.put
 import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import kotlinx.serialization.*
 
 @Serializable
 @Resource("/lines")
@@ -43,8 +43,10 @@ fun Route.line() {
     post<Lines> {
         try {
             val line = call.receive<NewLine>()
-            lineService.addLine(line)
-            call.respondText("Line stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = lineService.addLine(line),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("Line is in wrong format", status = HttpStatusCode.BadRequest)
         }

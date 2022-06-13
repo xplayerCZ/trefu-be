@@ -1,18 +1,18 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.service.RouteService
 import cz.davidkurzica.model.NewRoute
+import cz.davidkurzica.service.RouteService
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.put
 import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import kotlinx.serialization.*
 
 @Serializable
 @Resource("/routes")
@@ -47,8 +47,10 @@ fun Route.route() {
     post<Routes> {
         try {
             val route = call.receive<NewRoute>()
-            routeService.addRoute(route)
-            call.respondText("Route stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = routeService.addRoute(route),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("Route is in wrong format", status = HttpStatusCode.BadRequest)
         }

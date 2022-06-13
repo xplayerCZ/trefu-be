@@ -1,18 +1,18 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.service.StopService
 import cz.davidkurzica.model.NewStop
+import cz.davidkurzica.service.StopService
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.put
 import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import kotlinx.serialization.*
 
 @Serializable
 @Resource("/stops")
@@ -38,8 +38,10 @@ fun Route.stop() {
     post<Stops> {
         try {
             val stop = call.receive<NewStop>()
-            stopService.addStop(stop)
-            call.respondText("Stop stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = stopService.addStop(stop),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("Stop is in wrong format", status = HttpStatusCode.BadRequest)
         }

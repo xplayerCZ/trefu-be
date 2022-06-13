@@ -1,18 +1,18 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.service.PacketService
 import cz.davidkurzica.model.NewPacket
+import cz.davidkurzica.service.PacketService
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.put
 import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import kotlinx.serialization.*
 
 @Serializable
 @Resource("/packets")
@@ -43,8 +43,10 @@ fun Route.packet() {
     post<Packets> {
         try {
             val packet = call.receive<NewPacket>()
-            packetService.addPacket(packet)
-            call.respondText("Packet stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = packetService.addPacket(packet),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("Packet is in wrong format", status = HttpStatusCode.BadRequest)
         }

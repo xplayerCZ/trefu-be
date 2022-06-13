@@ -7,9 +7,9 @@ import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
+import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.routing.post
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
 
@@ -40,8 +40,10 @@ fun Route.connectionRule() {
     post<ConnectionRules> {
         try {
             val connectionRule = call.receive<ConnectionRule>()
-            connectionRuleService.addConnectionRule(connectionRule)
-            call.respondText("ConnectionRule stored correctly", status = HttpStatusCode.Created)
+            call.respond(
+                message = connectionRuleService.addConnectionRule(connectionRule),
+                status = HttpStatusCode.Created
+            )
         } catch (e: ContentTransformationException) {
             call.respondText("ConnectionRule is in wrong format", status = HttpStatusCode.BadRequest)
         }
