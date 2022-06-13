@@ -1,10 +1,11 @@
 package cz.davidkurzica.model
 
+import cz.davidkurzica.model.Rules.autoIncrement
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object Stops : Table() {
-    val id = integer("stop_id")
+    val id = integer("stop_id").autoIncrement()
     val name = text("name")
     val latitude = text("latitude")
     val longitude = text("longitude")
@@ -24,7 +25,6 @@ class Stop(
 
 @Serializable
 class NewStop(
-    val id: Int,
     val name: String,
     val latitude: String,
     val longitude: String,

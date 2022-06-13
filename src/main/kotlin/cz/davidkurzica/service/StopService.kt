@@ -32,7 +32,6 @@ class StopService {
         var key = 0
         dbQuery {
             key = (Stops.insert {
-                it[id] = stop.id
                 it[name] = stop.name
                 it[latitude] = stop.latitude
                 it[longitude] = stop.longitude
@@ -44,8 +43,7 @@ class StopService {
 
     suspend fun editStop(stop: NewStop, id: Int): Stop {
         dbQuery {
-            Stops.update({Stops.id eq id}) {
-                it[Stops.id] = stop.id
+            Stops.update({ Stops.id eq id }) {
                 it[name] = stop.name
                 it[latitude] = stop.latitude
                 it[longitude] = stop.longitude
