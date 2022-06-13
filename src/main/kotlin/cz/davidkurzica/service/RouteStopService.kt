@@ -1,12 +1,13 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.RouteStop
+import cz.davidkurzica.model.RouteStops
 import cz.davidkurzica.util.DatabaseFactory
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
+import org.koin.core.definition.indexKey
 
 class RouteStopService {
 
@@ -15,18 +16,14 @@ class RouteStopService {
         limit: Int? = null,
         routeId: Int? = null,
         stopId: Int? = null,
+        index: Int? = null
     ) = DatabaseFactory.dbQuery {
         val query = RouteStops.selectAll()
 
-        limit?.let {
-            query.limit(limit, (offset ?: 0).toLong())
-        }
-        routeId?.let {
-            query.andWhere { RouteStops.routeId eq routeId }
-        }
-        stopId?.let {
-            query.andWhere { RouteStops.stopId eq stopId }
-        }
+        limit?.let { query.limit(limit, (offset ?: 0).toLong()) }
+        routeId?.let { query.andWhere { RouteStops.routeId eq routeId } }
+        stopId?.let { query.andWhere { RouteStops.stopId eq stopId } }
+        index?.let { query.andWhere { RouteStops.index eq index } }
 
         query.mapNotNull { toRouteStop(it) }
     }
@@ -42,7 +39,8 @@ class RouteStopService {
         }
         return getRouteStops(
             routeId = routeStop.routeId,
-            stopId = routeStop.stopId
+            stopId = routeStop.stopId,
+            index = routeStop.index
         ).single()
     }
 
