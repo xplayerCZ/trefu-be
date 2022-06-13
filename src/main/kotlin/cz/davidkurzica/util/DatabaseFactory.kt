@@ -35,7 +35,7 @@ object DatabaseFactory {
     ) = HikariDataSource(HikariConfig(properties).apply {
         schema = "public"
         maximumPoolSize = 3
-        isAutoCommit = false
+        isAutoCommit = true
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     })
