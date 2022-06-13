@@ -35,6 +35,7 @@ class PacketService {
                 it[from] = packet.from
                 it[to] = packet.to
                 it[valid] = packet.valid
+                it[code] = packet.code
             } get Packets.id)
         }
         return getPacketById(key)!!
@@ -42,10 +43,11 @@ class PacketService {
 
     suspend fun editPacket(packet: NewPacket, id: Int): Packet {
         dbQuery {
-            Packets.update({Packets.id eq id}) {
+            Packets.update({ Packets.id eq id }) {
                 it[from] = packet.from
                 it[to] = packet.to
                 it[valid] = packet.valid
+                it[code] = packet.code
             }
         }
         return getPacketById(id)!!
@@ -56,6 +58,7 @@ class PacketService {
             id = row[Packets.id],
             from = row[Packets.from],
             to = row[Packets.to],
-            valid = row[Packets.valid]
+            valid = row[Packets.valid],
+            code = row[Packets.code]
         )
 }

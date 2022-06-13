@@ -11,6 +11,7 @@ object Packets : Table() {
     val from = date("from")
     val to = date("to")
     val valid = bool("valid")
+    val code = integer("code")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Packets")
 }
@@ -20,12 +21,14 @@ class Packet(
     val id: Int,
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
-    val valid: Boolean
+    val valid: Boolean,
+    val code: Int
 )
 
 @Serializable
 class NewPacket(
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
-    val valid: Boolean
+    val valid: Boolean,
+    val code: Int
 )
