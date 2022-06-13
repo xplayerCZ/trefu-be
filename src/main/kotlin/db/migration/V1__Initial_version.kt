@@ -8,10 +8,20 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("ClassName", "unused")
-class V1__Initial_version: BaseJavaMigration() {
+class V1__Initial_version : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Connections, ConnectionRules, Departures, Lines, Packets, Routes, RouteStops, Rules, Stops)
+            SchemaUtils.create(
+                Connections,
+                ConnectionRules,
+                Departures,
+                Lines,
+                Packets,
+                Routes,
+                RouteStops,
+                Rules,
+                Stops
+            )
 
             Rules.insert {
                 it[id] = 1

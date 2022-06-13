@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-object Departures: Table() {
+object Departures : Table() {
     val id = integer("departure_id").autoIncrement()
     val connectionId = integer("connection_id") references Connections.id
     val time = time("time").nullable()

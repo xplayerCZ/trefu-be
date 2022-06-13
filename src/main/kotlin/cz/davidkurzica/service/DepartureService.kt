@@ -1,11 +1,13 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.Departure
+import cz.davidkurzica.model.Departures
+import cz.davidkurzica.model.NewDeparture
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
 class DepartureService {
-    
+
     suspend fun getDepartures(
         offset: Int?,
         limit: Int?
@@ -40,7 +42,7 @@ class DepartureService {
 
     suspend fun editDeparture(departure: NewDeparture, id: Int): Departure {
         dbQuery {
-            Departures.update({Departures.id eq id}) {
+            Departures.update({ Departures.id eq id }) {
                 it[connectionId] = departure.connectionId
                 it[time] = departure.time
                 it[index] = departure.index
@@ -56,7 +58,7 @@ class DepartureService {
             time = row[Departures.time],
             index = row[Departures.index]
         )
-    
+
     /*
 
     suspend fun get(time: LocalTime, stopId: Int, date: LocalDate) = dbQuery {

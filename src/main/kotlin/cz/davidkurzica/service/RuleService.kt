@@ -1,6 +1,8 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.NewRule
+import cz.davidkurzica.model.Rule
+import cz.davidkurzica.model.Rules
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -18,7 +20,7 @@ class RuleService {
 
         query.mapNotNull { toRule(it) }
     }
-    
+
     suspend fun getRuleById(id: Int): Rule? = dbQuery {
         Rules.select {
             (Rules.id eq id)
@@ -38,7 +40,7 @@ class RuleService {
 
     suspend fun editRule(rule: NewRule, id: Int): Rule {
         dbQuery {
-            Rules.update({Rules.id eq id}) {
+            Rules.update({ Rules.id eq id }) {
                 it[description] = rule.description
             }
         }

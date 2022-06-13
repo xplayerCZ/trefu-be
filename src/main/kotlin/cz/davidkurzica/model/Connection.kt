@@ -3,7 +3,7 @@ package cz.davidkurzica.model
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
-object Connections: Table() {
+object Connections : Table() {
     val id = integer("connection_id").autoIncrement()
     val routeId = integer("route_id") references Routes.id
     val number = integer("number")
@@ -26,7 +26,8 @@ class NewConnection(
 
 @Serializable
 data class ConnectionItem(
-    val connectionsParts: List<ConnectionItemPart>)
+    val connectionsParts: List<ConnectionItemPart>
+)
 
 @Serializable
 data class ConnectionItemPart(

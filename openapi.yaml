@@ -936,7 +936,7 @@ components:
         direction:
           type: integer
           format: int64
-          enum: [0, 1]
+          enum: [ 0, 1 ]
     RouteStop:
       type: object
       required:

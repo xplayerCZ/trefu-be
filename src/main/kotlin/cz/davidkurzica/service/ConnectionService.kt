@@ -1,6 +1,8 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.Connection
+import cz.davidkurzica.model.Connections
+import cz.davidkurzica.model.NewConnection
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -39,7 +41,7 @@ class ConnectionService {
 
     suspend fun editConnection(connection: NewConnection, id: Int): Connection {
         dbQuery {
-            Connections.update({Connections.id eq id}) {
+            Connections.update({ Connections.id eq id }) {
                 it[routeId] = connection.routeId
                 it[number] = connection.number
             }

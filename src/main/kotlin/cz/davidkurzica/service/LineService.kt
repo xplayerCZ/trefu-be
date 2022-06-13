@@ -1,6 +1,8 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.Line
+import cz.davidkurzica.model.Lines
+import cz.davidkurzica.model.NewLine
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -26,7 +28,7 @@ class LineService {
             .singleOrNull()
     }
 
-    
+
     suspend fun addLine(line: NewLine): Line {
         var key = 0
         dbQuery {
@@ -41,7 +43,7 @@ class LineService {
 
     suspend fun editLine(line: NewLine, id: Int): Line {
         dbQuery {
-            Lines.update({Lines.id eq id}) {
+            Lines.update({ Lines.id eq id }) {
                 it[shortCode] = line.shortCode
                 it[fullCode] = line.fullCode
                 it[packetId] = line.packetId

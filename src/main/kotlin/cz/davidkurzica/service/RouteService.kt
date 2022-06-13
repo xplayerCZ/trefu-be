@@ -1,6 +1,8 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.NewRoute
+import cz.davidkurzica.model.Route
+import cz.davidkurzica.model.Routes
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -40,7 +42,7 @@ class RouteService {
 
     suspend fun editRoute(route: NewRoute, id: Int): Route {
         dbQuery {
-            Routes.update({Routes.id eq id}) {
+            Routes.update({ Routes.id eq id }) {
                 it[lineId] = route.lineId
                 it[length] = route.length
                 it[direction] = route.direction

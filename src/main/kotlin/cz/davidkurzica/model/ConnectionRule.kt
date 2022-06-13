@@ -3,7 +3,7 @@ package cz.davidkurzica.model
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
-object ConnectionRules: Table("connection_rules") {
+object ConnectionRules : Table("connection_rules") {
     val connectionId = integer("connection_id") references Connections.id
     val ruleId = integer("rule_id") references Rules.id
 

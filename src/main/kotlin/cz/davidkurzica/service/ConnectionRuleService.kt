@@ -1,6 +1,7 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.model.ConnectionRule
+import cz.davidkurzica.model.ConnectionRules
 import cz.davidkurzica.util.DatabaseFactory
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.andWhere
