@@ -53,6 +53,14 @@ class StopService {
         return getStopById(id)!!
     }
 
+    suspend fun deleteStopById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Stops.deleteWhere { Stops.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     private fun toStop(row: ResultRow): Stop =
         Stop(
             id = row[Stops.id],

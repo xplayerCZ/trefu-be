@@ -53,6 +53,14 @@ class PacketService {
         return getPacketById(id)!!
     }
 
+    suspend fun deletePacketById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Packets.deleteWhere { Packets.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     fun toPacket(row: ResultRow): Packet =
         Packet(
             id = row[Packets.id],

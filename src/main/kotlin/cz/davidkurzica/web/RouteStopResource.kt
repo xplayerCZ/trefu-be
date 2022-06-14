@@ -16,11 +16,21 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/route-stops")
 class RouteStops(
-    val routeId: Int? = null,
-    val stopId: Int? = null,
     val offset: Int? = 0,
-    val limit: Int? = 20
+    val limit: Int? = 20,
+    val index: Int? = null,
+    val routeId: Int? = null,
+    val stopId: Int? = null
 )
+
+@Serializable
+@Resource("/route-stops")
+data class RouteStopDelete(
+    val routeId: Int,
+    val stopId: Int,
+    val index: Int
+)
+
 
 fun Route.routeStop() {
 
@@ -49,4 +59,14 @@ fun Route.routeStop() {
         }
     }
 
+    delete<RouteStopDelete> {
+        if (routeStopService.deleteRouteStop(it.routeId, it.stopId, it.index)) {
+            call.respondText("RouteStop $it deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText(
+                "Failed to delete RouteStop $it",
+                status = HttpStatusCode.InternalServerError
+            )
+        }
+    }
 }

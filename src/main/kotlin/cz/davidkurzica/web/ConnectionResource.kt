@@ -75,6 +75,17 @@ fun Route.connection() {
         }
     }
 
+    delete<ConnectionById> {
+        if (connectionService.deleteConnectionById(it.id)) {
+            call.respondText("Connection with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText(
+                "Failed to delete Connection with id ${it.id}",
+                status = HttpStatusCode.InternalServerError
+            )
+        }
+    }
+
     get<ConnectionById.Departures> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }

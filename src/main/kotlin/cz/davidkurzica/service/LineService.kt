@@ -52,6 +52,14 @@ class LineService {
         return getLineById(id)!!
     }
 
+    suspend fun deleteLineById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Lines.deleteWhere { Lines.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     private fun toLine(row: ResultRow): Line =
         Line(
             id = row[Lines.id],

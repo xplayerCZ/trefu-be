@@ -65,4 +65,12 @@ fun Route.stop() {
             call.respondText("Stop is in wrong format", status = HttpStatusCode.BadRequest)
         }
     }
+
+    delete<StopById> {
+        if (stopService.deleteStopById(it.id)) {
+            call.respondText("Stop with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Stop with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
 }

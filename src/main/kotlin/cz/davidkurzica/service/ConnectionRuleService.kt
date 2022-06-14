@@ -2,11 +2,8 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.ConnectionRule
 import cz.davidkurzica.model.ConnectionRules
-import cz.davidkurzica.util.DatabaseFactory
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
+import org.jetbrains.exposed.sql.*
 
 class ConnectionRuleService {
 
@@ -15,7 +12,7 @@ class ConnectionRuleService {
         limit: Int? = null,
         connectionId: Int? = null,
         ruleId: Int? = null,
-    ) = DatabaseFactory.dbQuery {
+    ) = dbQuery {
         val query = ConnectionRules.selectAll()
 
         limit?.let {
@@ -32,7 +29,7 @@ class ConnectionRuleService {
     }
 
     suspend fun addConnectionRule(connectionRule: ConnectionRule): ConnectionRule {
-        DatabaseFactory.dbQuery {
+        dbQuery {
             ConnectionRules.insert {
                 it[connectionId] = connectionRule.connectionId
                 it[ruleId] = connectionRule.ruleId
@@ -42,6 +39,17 @@ class ConnectionRuleService {
             connectionId = connectionRule.connectionId,
             ruleId = connectionRule.ruleId
         ).single()
+    }
+
+    suspend fun deleteConnectionRule(connectionId: Int, ruleId: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = ConnectionRules.deleteWhere {
+                (ConnectionRules.connectionId eq connectionId)
+                    .and(ConnectionRules.ruleId eq ruleId)
+            }
+        }
+        return numOfDeletedItems == 1
     }
 
     fun toConnectionRule(row: ResultRow) =

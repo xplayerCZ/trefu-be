@@ -65,4 +65,12 @@ fun Route.rule() {
             call.respondText("Rule is in wrong format", status = HttpStatusCode.BadRequest)
         }
     }
+
+    delete<RuleById> {
+        if (ruleService.deleteRuleById(it.id)) {
+            call.respondText("Rule with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Rule with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
 }

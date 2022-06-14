@@ -1,13 +1,10 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.model.Connections
 import cz.davidkurzica.model.RouteStop
 import cz.davidkurzica.model.RouteStops
 import cz.davidkurzica.util.DatabaseFactory
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.andWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.koin.core.definition.indexKey
+import org.jetbrains.exposed.sql.*
 
 class RouteStopService {
 
@@ -42,6 +39,18 @@ class RouteStopService {
             stopId = routeStop.stopId,
             index = routeStop.index
         ).single()
+    }
+
+    suspend fun deleteRouteStop(routeId: Int, stopId: Int, index: Int): Boolean {
+        var numOfDeletedItems = 0
+        DatabaseFactory.dbQuery {
+            numOfDeletedItems = Connections.deleteWhere {
+                (RouteStops.routeId eq routeId)
+                    .and(RouteStops.stopId eq stopId)
+                    .and(RouteStops.index eq index)
+            }
+        }
+        return numOfDeletedItems == 1
     }
 
     fun toRouteStop(row: ResultRow) =

@@ -22,6 +22,14 @@ class ConnectionRules(
     val limit: Int? = 20
 )
 
+@Serializable
+@Resource("/connection-rules")
+data class ConnectionRuleDelete(
+    val connectionId: Int,
+    val ruleId: Int,
+
+    )
+
 fun Route.connectionRule() {
 
     val connectionRuleService: ConnectionRuleService by inject()
@@ -49,4 +57,14 @@ fun Route.connectionRule() {
         }
     }
 
+    delete<ConnectionRuleDelete> {
+        if (connectionRuleService.deleteConnectionRule(it.connectionId, it.ruleId)) {
+            call.respondText("ConnectionRule $it deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText(
+                "Failed to delete ConnectionRule $it",
+                status = HttpStatusCode.InternalServerError
+            )
+        }
+    }
 }

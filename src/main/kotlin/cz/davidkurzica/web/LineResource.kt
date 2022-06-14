@@ -71,6 +71,14 @@ fun Route.line() {
         }
     }
 
+    delete<LineById> {
+        if (lineService.deleteLineById(it.id)) {
+            call.respondText("Line with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Line with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
+
     get<LineById.Routes> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }

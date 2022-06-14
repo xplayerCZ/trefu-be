@@ -47,6 +47,14 @@ class RuleService {
         return getRuleById(id)!!
     }
 
+    suspend fun deleteRuleById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Rules.deleteWhere { Rules.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     fun toRule(row: ResultRow): Rule =
         Rule(
             id = row[Rules.id],

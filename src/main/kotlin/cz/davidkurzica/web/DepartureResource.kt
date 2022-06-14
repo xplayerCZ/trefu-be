@@ -65,4 +65,12 @@ fun Route.departure() {
             call.respondText("Departure is in wrong format", status = HttpStatusCode.BadRequest)
         }
     }
+
+    delete<DepartureById> {
+        if (departureService.deleteDepartureById(it.id)) {
+            call.respondText("Departure with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Departure with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
 }

@@ -75,6 +75,14 @@ fun Route.route() {
         }
     }
 
+    delete<RouteById> {
+        if (routeService.deleteRouteById(it.id)) {
+            call.respondText("Route with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Route with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
+
     get<RouteById.Connections> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }

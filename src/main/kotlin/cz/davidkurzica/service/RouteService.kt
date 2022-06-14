@@ -51,6 +51,14 @@ class RouteService {
         return getRouteById(id)!!
     }
 
+    suspend fun deleteRouteById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Routes.deleteWhere { Routes.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     fun toRoute(row: ResultRow): Route =
         Route(
             id = row[Routes.id],

@@ -71,6 +71,14 @@ fun Route.packet() {
         }
     }
 
+    delete<PacketById> {
+        if (packetService.deletePacketById(it.id)) {
+            call.respondText("Packet with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Failed to delete Packet with id ${it.id}", status = HttpStatusCode.InternalServerError)
+        }
+    }
+
     get<PacketById.Lines> {
         call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }

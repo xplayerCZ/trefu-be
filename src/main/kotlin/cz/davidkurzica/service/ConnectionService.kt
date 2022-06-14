@@ -49,6 +49,14 @@ class ConnectionService {
         return getConnectionById(id)!!
     }
 
+    suspend fun deleteConnectionById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Connections.deleteWhere { Connections.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     fun toConnection(row: ResultRow) =
         Connection(
             id = row[Connections.id],

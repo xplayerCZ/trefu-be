@@ -51,6 +51,14 @@ class DepartureService {
         return getDepartureById(id)!!
     }
 
+    suspend fun deleteDepartureById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Departures.deleteWhere { Departures.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
     fun toDeparture(row: ResultRow) =
         Departure(
             id = row[Departures.id],
