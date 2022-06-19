@@ -46,6 +46,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete packets
+      tags:
+        - Packets
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of packets deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /packets/{id}:
     parameters:
       - name: id
@@ -87,6 +104,17 @@ paths:
                 $ref: '#/components/schemas/Packet'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a packet by ID
+      tags:
+        - Packets
+      responses:
+        '204':
+          description: Packet deleted successfully
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -157,6 +185,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete lines
+      tags:
+        - Lines
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of lines deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /lines/{id}:
     parameters:
       - name: id
@@ -198,6 +243,17 @@ paths:
                 $ref: '#/components/schemas/Line'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a line by ID
+      tags:
+        - Lines
+      responses:
+        '204':
+          description: Line deleted successfully
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -268,6 +324,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete routes
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of routes deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /routes/{id}:
     parameters:
       - name: id
@@ -309,6 +382,17 @@ paths:
                 $ref: '#/components/schemas/Route'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a route by ID
+      tags:
+        - Routes
+      responses:
+        '204':
+          description: Route deleted successfully
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -420,6 +504,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete route-stop relations
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of route-stop relations deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /stops:
     get:
       summary: Returns a list of stops
@@ -461,6 +562,23 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete stops
+      tags:
+        - Stops
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of stops deleted.
         default:
           $ref: '#/components/responses/GeneralError'
   /stops/{id}:
@@ -508,6 +626,17 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a stop by ID
+      tags:
+        - Stops
+      responses:
+        '204':
+          description: Stop deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
   /connections:
     get:
       summary: Returns a list of connections
@@ -551,6 +680,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete connections
+      tags:
+        - Connections
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of connections deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /connections/{id}:
     parameters:
       - name: id
@@ -592,6 +738,17 @@ paths:
                 $ref: '#/components/schemas/Connection'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a connection by ID
+      tags:
+        - Connections
+      responses:
+        '204':
+          description: Connection deleted successfully
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -703,6 +860,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete connection-rule relations
+      tags:
+        - Connections
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of connection-rule relations deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /departures:
     get:
       summary: Returns a list of departures
@@ -744,6 +918,23 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         '404':
           $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete departures
+      tags:
+        - Departures
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of departures deleted.
         default:
           $ref: '#/components/responses/GeneralError'
   /departures/{id}:
@@ -791,6 +982,17 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a departure by ID
+      tags:
+        - Departures
+      responses:
+        '204':
+          description: Departure deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
   /rules:
     get:
       summary: Returns a list of rules
@@ -834,6 +1036,23 @@ paths:
           $ref: '#/components/responses/404NotFound'
         default:
           $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete rules
+      tags:
+        - Rules
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of rules deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /rules/{id}:
     parameters:
       - name: id
@@ -875,6 +1094,17 @@ paths:
                 $ref: '#/components/schemas/Rule'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a rule by ID
+      tags:
+        - Rules
+      responses:
+        '204':
+          description: Rule deleted successfully
         '404':
           $ref: '#/components/responses/404NotFound'
         default:
@@ -1000,6 +1230,7 @@ components:
       required:
         - validFrom
         - validTo
+        - code
       properties:
         id:
           type: integer
@@ -1011,6 +1242,9 @@ components:
           type: integer
           format: int64
         validTo:
+          type: integer
+          format: int64
+        code:
           type: integer
           format: int64
     Connection:
