@@ -16,11 +16,12 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/route-stops")
 class RouteStops(
-    val offset: Int? = 0,
-    val limit: Int? = 20,
-    val index: Int? = null,
-    val routeId: Int? = null,
-    val stopId: Int? = null
+    val offset: Int?,
+    val limit: Int?,
+    val index: Int?,
+    val routeId: Int?,
+    val stopId: Int?,
+    val served: Boolean,
 )
 
 @Serializable
@@ -28,7 +29,7 @@ class RouteStops(
 data class RouteStopDelete(
     val routeId: Int,
     val stopId: Int,
-    val index: Int
+    val index: Int,
 )
 
 
@@ -41,8 +42,10 @@ fun Route.routeStop() {
             routeStopService.getRouteStops(
                 offset = it.offset,
                 limit = it.limit,
+                index = it.index,
                 routeId = it.routeId,
-                stopId = it.stopId
+                stopId = it.stopId,
+                served = it.served,
             )
         )
     }

@@ -16,7 +16,10 @@ import org.koin.ktor.ext.inject
 
 @Serializable
 @Resource("/rules")
-class Rules(val offset: Int? = 0, val limit: Int? = 20)
+class Rules(
+    val offset: Int?,
+    val limit: Int?,
+)
 
 @Serializable
 @Resource("/rules/{id}")

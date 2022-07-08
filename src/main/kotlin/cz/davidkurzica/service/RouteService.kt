@@ -1,8 +1,6 @@
 package cz.davidkurzica.service
 
-import cz.davidkurzica.model.NewRoute
-import cz.davidkurzica.model.Route
-import cz.davidkurzica.model.Routes
+import cz.davidkurzica.model.*
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -10,12 +8,21 @@ class RouteService {
 
     suspend fun getRoutes(
         offset: Int?,
-        limit: Int?
+        limit: Int?,
+        lineId: Int?,
+        direction: Int?,
+        packetId: Int?,
     ) = dbQuery {
         val query = Routes.selectAll()
 
-        limit?.let {
-            query.limit(limit, (offset ?: 0).toLong())
+        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
+        lineId?.let { query.andWhere { Routes.lineId eq it } }
+        direction?.let { query.andWhere { Routes.direction eq it } }
+        packetId?.let {
+            query.adjustColumnSet {
+                innerJoin(Lines, { Lines.id }, { Routes.lineId })
+                innerJoin(Packets, { Packets.id }, { Lines.packetId })
+            }.andWhere { Packets.id eq it }
         }
 
         query.mapNotNull { toRoute(it) }

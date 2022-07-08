@@ -2,6 +2,7 @@ package cz.davidkurzica.web
 
 import cz.davidkurzica.model.NewPacket
 import cz.davidkurzica.service.PacketService
+import cz.davidkurzica.util.LocalDateSerializer
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
@@ -13,10 +14,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
+import java.time.LocalDate
 
 @Serializable
 @Resource("/packets")
-class Packets(val offset: Int? = 0, val limit: Int? = 20)
+class Packets(
+    val offset: Int?,
+    val limit: Int?,
+    val activeAfter: @Serializable(with = LocalDateSerializer::class) LocalDate?,
+    val activeBefore: @Serializable(with = LocalDateSerializer::class) LocalDate?,
+    val valid: Boolean?,
+)
 
 @Serializable
 @Resource("/packets/{id}")
@@ -35,7 +43,10 @@ fun Route.packet() {
         call.respond(
             packetService.getPackets(
                 offset = it.offset,
-                limit = it.limit
+                limit = it.limit,
+                activeAfter = it.activeAfter,
+                activeBefore = it.activeBefore,
+                valid = it.valid,
             )
         )
     }

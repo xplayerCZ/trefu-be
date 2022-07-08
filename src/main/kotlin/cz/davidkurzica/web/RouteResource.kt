@@ -16,7 +16,13 @@ import org.koin.ktor.ext.inject
 
 @Serializable
 @Resource("/routes")
-class Routes(val offset: Int? = 0, val limit: Int? = 20)
+class Routes(
+    val offset: Int?,
+    val limit: Int?,
+    val lineId: Int?,
+    val direction: Int?,
+    val packetId: Int?,
+)
 
 @Serializable
 @Resource("/routes/{id}")
@@ -39,7 +45,10 @@ fun Route.route() {
         call.respond(
             routeService.getRoutes(
                 offset = it.offset,
-                limit = it.limit
+                limit = it.limit,
+                lineId = it.lineId,
+                direction = it.direction,
+                packetId = it.packetId,
             )
         )
     }

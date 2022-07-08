@@ -16,19 +16,15 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/connection-rules")
 class ConnectionRules(
-    val connectionId: Int? = null,
-    val ruleId: Int? = null,
-    val offset: Int? = 0,
-    val limit: Int? = 20
+    val connectionId: Int?,
+    val ruleId: Int?,
+    val offset: Int?,
+    val limit: Int?,
 )
 
 @Serializable
 @Resource("/connection-rules")
-data class ConnectionRuleDelete(
-    val connectionId: Int,
-    val ruleId: Int,
-
-    )
+data class ConnectionRuleDelete(val connectionId: Int, val ruleId: Int)
 
 fun Route.connectionRule() {
 

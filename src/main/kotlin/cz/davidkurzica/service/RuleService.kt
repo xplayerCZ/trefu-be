@@ -10,13 +10,11 @@ class RuleService {
 
     suspend fun getRules(
         offset: Int?,
-        limit: Int?
+        limit: Int?,
     ) = dbQuery {
         val query = Rules.selectAll()
 
-        limit?.let {
-            query.limit(limit, (offset ?: 0).toLong())
-        }
+        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
 
         query.mapNotNull { toRule(it) }
     }

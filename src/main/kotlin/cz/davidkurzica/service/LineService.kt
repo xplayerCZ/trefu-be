@@ -3,6 +3,7 @@ package cz.davidkurzica.service
 import cz.davidkurzica.model.Line
 import cz.davidkurzica.model.Lines
 import cz.davidkurzica.model.NewLine
+import cz.davidkurzica.model.Packets
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
@@ -10,12 +11,15 @@ class LineService {
 
     suspend fun getLines(
         offset: Int?,
-        limit: Int?
+        limit: Int?,
+        packetId: Int?,
     ) = dbQuery {
         val query = Lines.selectAll()
 
-        limit?.let {
-            query.limit(limit, (offset ?: 0).toLong())
+        limit?.let { query.limit(limit, (offset ?: 0).toLong()) }
+        packetId?.let {
+            query.adjustColumnSet { innerJoin(Packets, { Packets.id }, { Lines.packetId }) }
+                .andWhere { Packets.id eq it }
         }
 
         query.mapNotNull { toLine(it) }

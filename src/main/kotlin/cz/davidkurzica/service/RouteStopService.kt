@@ -13,14 +13,16 @@ class RouteStopService {
         limit: Int? = null,
         routeId: Int? = null,
         stopId: Int? = null,
-        index: Int? = null
+        index: Int? = null,
+        served: Boolean? = null,
     ) = DatabaseFactory.dbQuery {
         val query = RouteStops.selectAll()
 
-        limit?.let { query.limit(limit, (offset ?: 0).toLong()) }
-        routeId?.let { query.andWhere { RouteStops.routeId eq routeId } }
-        stopId?.let { query.andWhere { RouteStops.stopId eq stopId } }
-        index?.let { query.andWhere { RouteStops.index eq index } }
+        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
+        routeId?.let { query.andWhere { RouteStops.routeId eq it } }
+        stopId?.let { query.andWhere { RouteStops.stopId eq it } }
+        index?.let { query.andWhere { RouteStops.index eq it } }
+        served?.let { query.andWhere { RouteStops.served eq it } }
 
         query.mapNotNull { toRouteStop(it) }
     }

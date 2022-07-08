@@ -16,7 +16,11 @@ import org.koin.ktor.ext.inject
 
 @Serializable
 @Resource("/stops")
-class Stops(val offset: Int? = 0, val limit: Int? = 20)
+class Stops(
+    val offset: Int?,
+    val limit: Int?,
+    val packetId: Int?,
+)
 
 @Serializable
 @Resource("/stops/{id}")
@@ -30,7 +34,8 @@ fun Route.stop() {
         call.respond(
             stopService.getStops(
                 offset = it.offset,
-                limit = it.limit
+                limit = it.limit,
+                packetId = it.packetId,
             )
         )
     }
