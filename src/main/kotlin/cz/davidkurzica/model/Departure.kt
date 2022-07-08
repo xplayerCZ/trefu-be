@@ -23,14 +23,14 @@ class Departure(
     val id: Int,
     val connectionId: Int,
     val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-    val index: Int
+    val index: Int,
 )
 
 @Serializable
 class NewDeparture(
     val connectionId: Int,
     val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-    val index: Int
+    val index: Int,
 )
 
 @Serializable
@@ -50,5 +50,5 @@ data class DepartureSimple(
 data class DepartureTimetable(
     val date: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val lineShortCode: String,
-    val departures: List<DepartureSimple>
+    val departures: List<DepartureSimple>,
 )

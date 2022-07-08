@@ -22,7 +22,7 @@ class Packet(
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val valid: Boolean,
-    val code: Int
+    val code: Int,
 )
 
 @Serializable
@@ -30,5 +30,5 @@ class NewPacket(
     val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val valid: Boolean,
-    val code: Int
+    val code: Int,
 )

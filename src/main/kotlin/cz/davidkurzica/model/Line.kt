@@ -24,12 +24,12 @@ class Line(
 class NewLine(
     val shortCode: String,
     val fullCode: Int,
-    val packetId: Int
+    val packetId: Int,
 )
 
 
 @Serializable
 class LineItem(
     val id: Int,
-    val shortCode: String
+    val shortCode: String,
 )

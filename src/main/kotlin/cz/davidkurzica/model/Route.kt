@@ -17,19 +17,19 @@ class Route(
     val id: Int,
     val lineId: Int,
     val length: Int,
-    val direction: Int
+    val direction: Int,
 )
 
 @Serializable
 class NewRoute(
     val lineId: Int,
     val length: Int,
-    val direction: Int
+    val direction: Int,
 )
 
 
 @Serializable
 class Direction(
     val id: Int,
-    val description: String
+    val description: String,
 )

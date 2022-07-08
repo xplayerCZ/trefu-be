@@ -1,6 +1,5 @@
 package cz.davidkurzica.model
 
-import cz.davidkurzica.model.Rules.autoIncrement
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
@@ -20,7 +19,7 @@ class Stop(
     val name: String,
     val latitude: String,
     val longitude: String,
-    val code: Int
+    val code: Int,
 )
 
 @Serializable
@@ -28,7 +27,7 @@ class NewStop(
     val name: String,
     val latitude: String,
     val longitude: String,
-    val code: Int
+    val code: Int,
 )
 
 @Serializable

@@ -26,12 +26,12 @@ class NewConnection(
 
 @Serializable
 data class ConnectionItem(
-    val connectionsParts: List<ConnectionItemPart>
+    val connectionsParts: List<ConnectionItemPart>,
 )
 
 @Serializable
 data class ConnectionItemPart(
     val lineShortCode: String,
     val from: DepartureSimple,
-    val to: DepartureSimple
+    val to: DepartureSimple,
 )

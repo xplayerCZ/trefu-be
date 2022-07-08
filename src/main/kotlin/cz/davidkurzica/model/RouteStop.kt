@@ -17,5 +17,5 @@ class RouteStop(
     val stopId: Int,
     val routeId: Int,
     val index: Int,
-    val served: Boolean
+    val served: Boolean,
 )
