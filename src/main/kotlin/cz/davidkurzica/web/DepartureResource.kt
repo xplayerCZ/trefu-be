@@ -19,13 +19,13 @@ import java.time.LocalTime
 @Serializable
 @Resource("/departures")
 class Departures(
-    val offset: Int?,
-    val limit: Int?,
-    val connectionId: Int?,
-    val index: Int?,
-    val after: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-    val before: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-    val packetId: Int?,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val connectionId: Int? = null,
+    val index: Int? = null,
+    val after: @Serializable(with = LocalTimeSerializer::class) LocalTime? = null,
+    val before: @Serializable(with = LocalTimeSerializer::class) LocalTime? = null,
+    val packetId: Int? = null,
 )
 
 @Serializable

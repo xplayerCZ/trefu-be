@@ -16,12 +16,12 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/route-stops")
 class RouteStops(
-    val offset: Int?,
-    val limit: Int?,
-    val index: Int?,
-    val routeId: Int?,
-    val stopId: Int?,
-    val served: Boolean,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val index: Int? = null,
+    val routeId: Int? = null,
+    val stopId: Int? = null,
+    val served: Boolean? = null,
 )
 
 @Serializable

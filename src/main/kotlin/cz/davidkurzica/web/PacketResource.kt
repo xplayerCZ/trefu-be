@@ -19,11 +19,11 @@ import java.time.LocalDate
 @Serializable
 @Resource("/packets")
 class Packets(
-    val offset: Int?,
-    val limit: Int?,
-    val activeAfter: @Serializable(with = LocalDateSerializer::class) LocalDate?,
-    val activeBefore: @Serializable(with = LocalDateSerializer::class) LocalDate?,
-    val valid: Boolean?,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val activeAfter: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+    val activeBefore: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+    val valid: Boolean? = null,
 )
 
 @Serializable
@@ -32,7 +32,7 @@ class PacketById(val id: Int) {
 
     @Serializable
     @Resource("/lines")
-    class Lines(val parent: PacketById, val offset: Int? = 0, val limit: Int? = 20)
+    class Lines(val parent: PacketById, val offset: Int? = null, val limit: Int? = null)
 }
 
 fun Route.packet() {

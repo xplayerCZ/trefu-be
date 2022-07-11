@@ -16,10 +16,10 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/connection-rules")
 class ConnectionRules(
-    val connectionId: Int?,
-    val ruleId: Int?,
-    val offset: Int?,
-    val limit: Int?,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val connectionId: Int? = null,
+    val ruleId: Int? = null,
 )
 
 @Serializable

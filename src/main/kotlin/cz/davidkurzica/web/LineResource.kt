@@ -17,9 +17,9 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/lines")
 class Lines(
-    val offset: Int?,
-    val limit: Int?,
-    val packetId: Int?,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val packetId: Int? = null,
 )
 
 @Serializable
@@ -28,7 +28,7 @@ class LineById(val id: Int) {
 
     @Serializable
     @Resource("/routes")
-    class Routes(val parent: LineById, val offset: Int? = 0, val limit: Int? = 20)
+    class Routes(val parent: LineById, val offset: Int? = null, val limit: Int? = null)
 }
 
 fun Route.line() {

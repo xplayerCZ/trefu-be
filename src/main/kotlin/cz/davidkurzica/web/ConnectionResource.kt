@@ -17,10 +17,10 @@ import org.koin.ktor.ext.inject
 @Serializable
 @Resource("/connections")
 class Connections(
-    val offset: Int?,
-    val limit: Int?,
-    val routeId: Int?,
-    val packetId: Int?,
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val routeId: Int? = null,
+    val packetId: Int? = null,
 )
 
 @Serializable
@@ -29,11 +29,11 @@ class ConnectionById(val id: Int) {
 
     @Serializable
     @Resource("/departures")
-    class Departures(val parent: ConnectionById, val offset: Int? = 0, val limit: Int? = 20)
+    class Departures(val parent: ConnectionById, val offset: Int? = null, val limit: Int? = null)
 
     @Serializable
     @Resource("/rules")
-    class Rules(val parent: ConnectionById, val offset: Int? = 0, val limit: Int? = 20)
+    class Rules(val parent: ConnectionById, val offset: Int? = null, val limit: Int? = null)
 }
 
 fun Route.connection() {
