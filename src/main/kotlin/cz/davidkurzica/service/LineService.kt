@@ -16,10 +16,12 @@ class LineService {
     ) = dbQuery {
         val query = Lines.selectAll()
 
-        limit?.let { query.limit(limit, (offset ?: 0).toLong()) }
-        packetId?.let {
-            query.adjustColumnSet { innerJoin(Packets, { Packets.id }, { Lines.packetId }) }
-                .andWhere { Packets.id eq it }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
         }
 
         query.mapNotNull { toLine(it) }

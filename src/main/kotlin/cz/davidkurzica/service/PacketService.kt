@@ -20,10 +20,12 @@ class PacketService {
     ) = dbQuery {
         val query = Packets.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        activeAfter?.let { query.andWhere { (Packets.from greaterEq it) or (Packets.to greaterEq it) } }
-        activeBefore?.let { query.andWhere { (Packets.from lessEq it) or (Packets.to lessEq it) } }
-        valid?.let { query.andWhere { Packets.valid eq it } }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            activeAfter?.let { andWhere { (Packets.from greaterEq it) or (Packets.to greaterEq it) } }
+            activeBefore?.let { andWhere { (Packets.from lessEq it) or (Packets.to lessEq it) } }
+            valid?.let { andWhere { Packets.valid eq it } }
+        }
 
         query.mapNotNull { toPacket(it) }
     }

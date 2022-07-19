@@ -15,9 +15,11 @@ class ConnectionRuleService {
     ) = dbQuery {
         val query = ConnectionRules.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        connectionId?.let { query.andWhere { ConnectionRules.connectionId eq it } }
-        ruleId?.let { query.andWhere { ConnectionRules.ruleId eq it } }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            connectionId?.let { andWhere { ConnectionRules.connectionId eq it } }
+            ruleId?.let { andWhere { ConnectionRules.ruleId eq it } }
+        }
 
         query.mapNotNull { toConnectionRule(it) }
     }

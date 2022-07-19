@@ -15,14 +15,15 @@ class RouteService {
     ) = dbQuery {
         val query = Routes.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        lineId?.let { query.andWhere { Routes.lineId eq it } }
-        direction?.let { query.andWhere { Routes.direction eq it } }
-        packetId?.let {
-            query.adjustColumnSet {
-                innerJoin(Lines, { Lines.id }, { Routes.lineId })
-                innerJoin(Packets, { Packets.id }, { Lines.packetId })
-            }.andWhere { Packets.id eq it }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            lineId?.let { andWhere { Routes.lineId eq it } }
+            direction?.let { andWhere { Routes.direction eq it } }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
         }
 
         query.mapNotNull { toRoute(it) }

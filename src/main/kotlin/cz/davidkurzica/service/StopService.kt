@@ -13,14 +13,15 @@ class StopService {
     ) = dbQuery {
         val query = Stops.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        packetId?.let {
-            query.adjustColumnSet {
-                innerJoin(RouteStops, { RouteStops.stopId }, { Stops.id })
-                innerJoin(Routes, { Routes.id }, { RouteStops.routeId })
-                innerJoin(Lines, { Lines.id }, { Routes.lineId })
-                innerJoin(Packets, { Packets.id }, { Lines.packetId })
-            }.andWhere { Packets.id eq it }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            packetId?.let {
+                adjustColumnSet { innerJoin(RouteStops) }
+                adjustColumnSet { innerJoin(Routes) }
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
         }
 
         query.mapNotNull { toStop(it) }

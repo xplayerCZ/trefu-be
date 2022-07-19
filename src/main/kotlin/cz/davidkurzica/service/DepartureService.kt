@@ -20,18 +20,19 @@ class DepartureService {
     ) = dbQuery {
         val query = Departures.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        connectionId?.let { query.andWhere { Departures.connectionId eq it } }
-        index?.let { query.andWhere { Departures.index eq it } }
-        after?.let { query.andWhere { Departures.time greaterEq it } }
-        before?.let { query.andWhere { Departures.time lessEq it } }
-        packetId?.let {
-            query.adjustColumnSet {
-                innerJoin(Connections, { Connections.id }, { Departures.connectionId })
-                innerJoin(Routes, { Routes.id }, { Connections.routeId })
-                innerJoin(Lines, { Lines.id }, { Routes.lineId })
-                innerJoin(Packets, { Packets.id }, { Lines.packetId })
-            }.andWhere { Packets.id eq it }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            connectionId?.let { andWhere { Departures.connectionId eq it } }
+            index?.let { andWhere { Departures.index eq it } }
+            after?.let { andWhere { Departures.time greaterEq it } }
+            before?.let { andWhere { Departures.time lessEq it } }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Connections) }
+                adjustColumnSet { innerJoin(Routes) }
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
         }
 
         query.mapNotNull { toDeparture(it) }

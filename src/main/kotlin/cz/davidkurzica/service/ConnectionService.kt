@@ -14,14 +14,15 @@ class ConnectionService {
     ) = dbQuery {
         val query = Connections.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
-        routeId?.let { query.andWhere { Connections.routeId eq it } }
-        packetId?.let {
-            query.adjustColumnSet {
-                innerJoin(Routes, { Routes.id }, { Connections.routeId })
-                innerJoin(Lines, { Lines.id }, { Routes.lineId })
-                innerJoin(Packets, { Packets.id }, { Lines.packetId })
-            }.andWhere { Packets.id eq it }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            routeId?.let { andWhere { Connections.routeId eq it } }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Routes) }
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
         }
 
         query.mapNotNull { toConnection(it) }

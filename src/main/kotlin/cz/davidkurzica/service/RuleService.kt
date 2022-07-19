@@ -14,7 +14,9 @@ class RuleService {
     ) = dbQuery {
         val query = Rules.selectAll()
 
-        limit?.let { query.limit(it, (offset ?: 0).toLong()) }
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+        }
 
         query.mapNotNull { toRule(it) }
     }
