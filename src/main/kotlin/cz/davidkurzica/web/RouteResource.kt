@@ -20,7 +20,6 @@ class Routes(
     val offset: Int? = null,
     val limit: Int? = null,
     val lineId: Int? = null,
-    val direction: Int? = null,
     val packetId: Int? = null,
 )
 
@@ -47,7 +46,6 @@ fun Route.route() {
                 offset = it.offset,
                 limit = it.limit,
                 lineId = it.lineId,
-                direction = it.direction,
                 packetId = it.packetId,
             )
         )

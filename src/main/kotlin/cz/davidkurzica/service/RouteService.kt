@@ -10,7 +10,6 @@ class RouteService {
         offset: Int?,
         limit: Int?,
         lineId: Int?,
-        direction: Int?,
         packetId: Int?,
     ) = dbQuery {
         val query = Routes.selectAll()
@@ -18,7 +17,6 @@ class RouteService {
         query.apply {
             limit?.let { limit(it, (offset ?: 0).toLong()) }
             lineId?.let { andWhere { Routes.lineId eq it } }
-            direction?.let { andWhere { Routes.direction eq it } }
             packetId?.let {
                 adjustColumnSet { innerJoin(Lines) }
                 adjustColumnSet { innerJoin(Packets) }
@@ -42,7 +40,6 @@ class RouteService {
             key = (Routes.insert {
                 it[lineId] = route.lineId
                 it[length] = route.length
-                it[direction] = route.direction
             } get Routes.id)
         }
         return getRouteById(key)!!
@@ -53,7 +50,6 @@ class RouteService {
             Routes.update({ Routes.id eq id }) {
                 it[lineId] = route.lineId
                 it[length] = route.length
-                it[direction] = route.direction
             }
         }
         return getRouteById(id)!!
@@ -72,7 +68,6 @@ class RouteService {
             id = row[Routes.id],
             lineId = row[Routes.lineId],
             length = row[Routes.length],
-            direction = row[Routes.direction]
         )
 
 

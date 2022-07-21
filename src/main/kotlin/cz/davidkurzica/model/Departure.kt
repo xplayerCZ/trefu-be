@@ -12,7 +12,7 @@ import java.time.LocalTime
 object Departures : Table() {
     val id = integer("departure_id").autoIncrement()
     val connectionId = integer("connection_id") references Connections.id
-    val time = time("time").nullable()
+    val time = time("time").nullable().index()
     val index = integer("index")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Departures")

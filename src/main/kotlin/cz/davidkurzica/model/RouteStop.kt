@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Table
 object RouteStops : Table("route_stops") {
     val stopId = integer("stop_id") references Stops.id
     val routeId = integer("route_id") references Routes.id
-    val index = integer("index")
+    val index = integer("index").index()
     val served = bool("served")
 
     override val primaryKey = PrimaryKey(stopId, routeId, index, name = "PK_RouteStops")

@@ -37,6 +37,11 @@ class V1__Initial_version : BaseJavaMigration() {
                 it[id] = 3
                 it[description] = "jede v sobotu"
             }
+
+            Rules.insert {
+                it[id] = 4
+                it[description] = "jede v pracovních dnech 1.7.- 31.8."
+            }
         }
     }
 }

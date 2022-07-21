@@ -2,10 +2,10 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
 import cz.davidkurzica.util.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.LocalTimeSerializer
+import cz.davidkurzica.util.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.*
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 class DepartureService {
 
@@ -14,23 +14,28 @@ class DepartureService {
         limit: Int?,
         connectionId: Int?,
         index: Int?,
-        after: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-        before: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
+        after: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
+        before: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
         packetId: Int?,
     ) = dbQuery {
         val query = Departures.selectAll()
+            .orderBy(Departures.time)
 
         query.apply {
+            adjustJoinToPackets()
+
             limit?.let { limit(it, (offset ?: 0).toLong()) }
             connectionId?.let { andWhere { Departures.connectionId eq it } }
             index?.let { andWhere { Departures.index eq it } }
-            after?.let { andWhere { Departures.time greaterEq it } }
-            before?.let { andWhere { Departures.time lessEq it } }
+            after?.let {
+                andWhere { Departures.time greaterEq it.toLocalTime() }
+                andWhere { Packets.from lessEq it.toLocalDate() }
+            }
+            before?.let {
+                andWhere { Departures.time lessEq it.toLocalTime() }
+                andWhere { Packets.to greaterEq it.toLocalDate() }
+            }
             packetId?.let {
-                adjustColumnSet { innerJoin(Connections) }
-                adjustColumnSet { innerJoin(Routes) }
-                adjustColumnSet { innerJoin(Lines) }
-                adjustColumnSet { innerJoin(Packets) }
                 andWhere { Packets.id eq it }
             }
         }
@@ -83,6 +88,13 @@ class DepartureService {
             time = row[Departures.time],
             index = row[Departures.index]
         )
+
+    private fun Query.adjustJoinToPackets() = run {
+        adjustColumnSet { innerJoin(Connections) }
+        adjustColumnSet { innerJoin(Routes) }
+        adjustColumnSet { innerJoin(Lines) }
+        adjustColumnSet { innerJoin(Packets) }
+    }
 
     /*
 
