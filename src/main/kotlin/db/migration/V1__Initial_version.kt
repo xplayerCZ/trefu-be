@@ -7,10 +7,21 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class V1__Initial_version: BaseJavaMigration() {
+@Suppress("ClassName", "unused")
+class V1__Initial_version : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Connections, ConnectionRules, Departures, Lines, Packets, Routes, RouteStops, Rules, Stops)
+            SchemaUtils.create(
+                Connections,
+                ConnectionRules,
+                Departures,
+                Lines,
+                Packets,
+                Routes,
+                RouteStops,
+                Rules,
+                Stops
+            )
 
             Rules.insert {
                 it[id] = 1
@@ -25,6 +36,11 @@ class V1__Initial_version: BaseJavaMigration() {
             Rules.insert {
                 it[id] = 3
                 it[description] = "jede v sobotu"
+            }
+
+            Rules.insert {
+                it[id] = 4
+                it[description] = "jede v pracovních dnech 1.7.- 31.8."
             }
         }
     }

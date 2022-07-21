@@ -1,4 +1,4 @@
-package cz.davidkurzica.service
+package cz.davidkurzica.util
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -31,11 +31,11 @@ object DatabaseFactory {
     }
 
     private fun createHikariDataSource(
-        properties: Properties
+        properties: Properties,
     ) = HikariDataSource(HikariConfig(properties).apply {
         schema = "public"
         maximumPoolSize = 3
-        isAutoCommit = false
+        isAutoCommit = true
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     })
@@ -55,6 +55,6 @@ object DatabaseFactory {
     }
 
     suspend fun <T> dbQuery(
-        block: suspend () -> T
+        block: suspend () -> T,
     ): T = newSuspendedTransaction(transactionIsolation = TRANSACTION_REPEATABLE_READ) { block() }
 }

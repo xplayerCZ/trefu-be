@@ -3,7 +3,7 @@ package cz.davidkurzica.model
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
-object Rules: Table() {
+object Rules : Table() {
     val id = integer("rule_id").autoIncrement()
     val description = text("description")
 
@@ -11,14 +11,12 @@ object Rules: Table() {
 }
 
 @Serializable
-class NewRule(
+class Rule(
     val id: Int,
-    val description: String
+    val description: String,
 )
 
 @Serializable
-class Rule(
-    val id: Int,
-    val description: String
+class NewRule(
+    val description: String,
 )
-

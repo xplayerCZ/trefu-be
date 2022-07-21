@@ -1,10 +1,5 @@
 package cz.davidkurzica.model
 
-import cz.davidkurzica.model.Connections.autoIncrement
-import cz.davidkurzica.model.Connections.references
-import cz.davidkurzica.model.Departures.autoIncrement
-import cz.davidkurzica.model.Departures.nullable
-import cz.davidkurzica.model.Departures.references
 import cz.davidkurzica.util.LocalDateSerializer
 import cz.davidkurzica.util.LocalTimeSerializer
 import kotlinx.serialization.Serializable
@@ -14,10 +9,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 
-object Departures: Table() {
+object Departures : Table() {
     val id = integer("departure_id").autoIncrement()
     val connectionId = integer("connection_id") references Connections.id
-    val time = time("time").nullable()
+    val time = time("time").nullable().index()
     val index = integer("index")
 
     override val primaryKey = PrimaryKey(id, name = "PK_Departures")
@@ -26,8 +21,16 @@ object Departures: Table() {
 @Serializable
 class Departure(
     val id: Int,
+    val connectionId: Int,
     val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
-    val index: Int
+    val index: Int,
+)
+
+@Serializable
+class NewDeparture(
+    val connectionId: Int,
+    val time: @Serializable(with = LocalTimeSerializer::class) LocalTime?,
+    val index: Int,
 )
 
 @Serializable
@@ -47,5 +50,5 @@ data class DepartureSimple(
 data class DepartureTimetable(
     val date: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val lineShortCode: String,
-    val departures: List<DepartureSimple>
+    val departures: List<DepartureSimple>,
 )

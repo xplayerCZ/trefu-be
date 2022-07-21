@@ -1,11 +1,533 @@
 openapi: 3.1.0
 info:
-  version: '1.0.0'
+  version: '1.1'
   title: 'trefu-be'
 paths:
+  /packets:
+    get:
+      summary: Returns a list of packets
+      tags:
+        - Packets
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/activeAfterParam'
+        - $ref: '#/components/parameters/activeBeforeParam'
+        - $ref: '#/components/parameters/validParam'
+      responses:
+        '200':
+          description: A JSON array of packets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Packet'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new packet
+      tags:
+        - Packets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Packet'
+      responses:
+        '201':
+          description: Created a packet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Packet'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete packets
+      tags:
+        - Packets
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of packets deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /packets/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single packet by ID
+      tags:
+        - Packets
+      responses:
+        '200':
+          description: A packet object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Packet'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a packet by ID
+      tags:
+        - Packets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Packet'
+      responses:
+        '200':
+          description: An updated packet object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Packet'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a packet by ID
+      tags:
+        - Packets
+      responses:
+        '204':
+          description: Packet deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /packets/{id}/lines:
+    get:
+      summary: Returns a list of lines
+      description: Returns a list of lines connected to specific packet.
+      tags:
+        - Packets
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of lines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Packet'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /lines:
+    get:
+      summary: Returns a list of lines
+      tags:
+        - Lines
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/packetIdParam'
+      responses:
+        '200':
+          description: A JSON array of lines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Line'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new line
+      tags:
+        - Lines
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Line'
+      responses:
+        '201':
+          description: Created a line
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Line'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete lines
+      tags:
+        - Lines
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of lines deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /lines/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single line by ID
+      tags:
+        - Lines
+      responses:
+        '200':
+          description: A line object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Line'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a line by ID
+      tags:
+        - Lines
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Line'
+      responses:
+        '200':
+          description: An updated line object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Line'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a line by ID
+      tags:
+        - Lines
+      responses:
+        '204':
+          description: Line deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /lines/{id}/routes:
+    get:
+      summary: Returns a list of routes
+      description: Returns a list of routes connected to specific line.
+      tags:
+        - Lines
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/directionParam'
+        - $ref: '#/components/parameters/packetIdParam'
+      responses:
+        '200':
+          description: A JSON array of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Line'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /routes:
+    get:
+      summary: Returns a list of routes
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/lineIdParam'
+        - $ref: '#/components/parameters/directionParam'
+        - $ref: '#/components/parameters/packetIdParam'
+      responses:
+        '200':
+          description: A JSON array of routes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new route
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+      responses:
+        '201':
+          description: Created a route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete routes
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of routes deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /routes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single route by ID
+      tags:
+        - Routes
+      responses:
+        '200':
+          description: A route object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a route by ID
+      tags:
+        - Routes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+      responses:
+        '200':
+          description: An updated route object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a route by ID
+      tags:
+        - Routes
+      responses:
+        '204':
+          description: Route deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /routes/{id}/connections:
+    get:
+      summary: Returns a list of connections
+      description: Returns a list of connections connected to specific route.
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of connections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /routes/{id}/stops:
+    get:
+      summary: Returns a list of route-stop relations
+      description: Returns a list of route-stop relations connected to specific route.
+      tags:
+        - Routes
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/stopIdParam'
+        - $ref: '#/components/parameters/indexParam'
+        - $ref: '#/components/parameters/servedParam'
+      responses:
+        '200':
+          description: A JSON array of stops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteStop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /route-stops:
+    get:
+      summary: Returns a list of route-stop relations
+      tags:
+        - RouteStops
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/stopIdParam'
+        - $ref: '#/components/parameters/routeIdParam'
+        - $ref: '#/components/parameters/indexParam'
+        - $ref: '#/components/parameters/servedParam'
+      responses:
+        '200':
+          description: A JSON array of route-stops
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RouteStop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new route-stop relation
+      tags:
+        - RouteStops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteStop'
+      responses:
+        '201':
+          description: Created a route-stop relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete route-stop relations
+      tags:
+        - RouteStops
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of route-stop relations deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
   /stops:
     get:
-      summary: Returns a list of stops.
+      summary: Returns a list of stops
+      tags:
+        - Stops
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/packetIdParam'
       responses:
         '200':
           description: A JSON array of stops
@@ -15,48 +537,583 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Stop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /stops/{id}:
-    get:
-      summary: Get a single stop.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            minimum: 1
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new stop
+      tags:
+        - Stops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Stop'
       responses:
-        '200':
-          description: A stop object.
+        '201':
+          description: Created a stop
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Stop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
         default:
-          description: Unexpected error
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete stops
+      tags:
+        - Stops
+      responses:
+        '200':
+          description: Deletion details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of stops deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /stops/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single stop by ID
+      tags:
+        - Stops
+      responses:
+        '200':
+          description: A stop object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stop'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a stop by ID
+      tags:
+        - Stops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Stop'
+      responses:
+        '200':
+          description: An updated stop object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stop'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a stop by ID
+      tags:
+        - Stops
+      responses:
+        '204':
+          description: Stop deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connections:
+    get:
+      summary: Returns a list of connections
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/packetIdParam'
+        - $ref: '#/components/parameters/routeIdParam'
+      responses:
+        '200':
+          description: A JSON array of connections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new connection
+      tags:
+        - Connections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connection'
+      responses:
+        '201':
+          description: Created a connection
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete connections
+      tags:
+        - Connections
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of connections deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connections/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single connection by ID
+      tags:
+        - Connections
+      responses:
+        '200':
+          description: A connection object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a connection by ID
+      tags:
+        - Connections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connection'
+      responses:
+        '200':
+          description: An updated connection object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connection'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a connection by ID
+      tags:
+        - Connections
+      responses:
+        '204':
+          description: Connection deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connections/{id}/departures:
+    get:
+      summary: Returns a list of departures
+      description: Returns a list of departures connected to specific connection.
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/indexParam'
+        - $ref: '#/components/parameters/afterParam'
+        - $ref: '#/components/parameters/beforeParam'
+      responses:
+        '200':
+          description: A JSON array of departures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connections/{id}/rules:
+    get:
+      summary: Returns a list of rules
+      description: Returns a list of rules connected to specific connection.
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /connection-rules:
+    get:
+      summary: Returns a list of connection-rule relations
+      tags:
+        - ConnectionRules
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/connectionIdParam'
+        - $ref: '#/components/parameters/ruleIdParam'
+      responses:
+        '200':
+          description: A JSON array of connection-rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectionRule'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new connection-rule relation
+      tags:
+        - ConnectionRules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionRule'
+      responses:
+        '201':
+          description: Created a connection-rule relation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionRule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete connection-rule relations
+      tags:
+        - ConnectionRules
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of connection-rule relations deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /departures:
+    get:
+      summary: Returns a list of departures
+      tags:
+        - Departures
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/connectionIdParam'
+        - $ref: '#/components/parameters/indexParam'
+        - $ref: '#/components/parameters/afterParam'
+        - $ref: '#/components/parameters/beforeParam'
+        - $ref: '#/components/parameters/packetIdParam'
+      responses:
+        '200':
+          description: A JSON array of departures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Departure'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new departure
+      tags:
+        - Departures
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Departure'
+      responses:
+        '201':
+          description: Created a departure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departure'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete departures
+      tags:
+        - Departures
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of departures deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /departures/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single departure by ID
+      tags:
+        - Departures
+      responses:
+        '200':
+          description: A departure object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departure'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a departure by ID
+      tags:
+        - Departures
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Departure'
+      responses:
+        '200':
+          description: An updated departure object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Departure'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a departure by ID
+      tags:
+        - Departures
+      responses:
+        '204':
+          description: Departure deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /rules:
+    get:
+      summary: Returns a list of rules
+      tags:
+        - Rules
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: A JSON array of rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rule'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    post:
+      summary: Create a new rule
+      tags:
+        - Rules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '201':
+          description: Created a rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete rules
+      tags:
+        - Rules
+      responses:
+        '200':
+          description: Deletion details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  numOfDeletedItems:
+                    type: integer
+                    description: The number of rules deleted.
+        default:
+          $ref: '#/components/responses/GeneralError'
+  /rules/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    get:
+      summary: Get a single rule by ID
+      tags:
+        - Rules
+      responses:
+        '200':
+          description: A rule object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    put:
+      summary: Update a rule by ID
+      tags:
+        - Rules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rule'
+      responses:
+        '200':
+          description: An updated rule object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+    delete:
+      summary: Delete a rule by ID
+      tags:
+        - Rules
+      responses:
+        '204':
+          description: Rule deleted successfully
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        default:
+          $ref: '#/components/responses/GeneralError'
+
 components:
   schemas:
     Stop:
       type: object
       required:
-        - id
         - latitude
         - longtitude
         - code
       properties:
         id:
           type: integer
-          format: int64
           examples:
             - 1
             - 2
@@ -70,56 +1127,78 @@ components:
             - 17.9026936E
         code:
           type: integer
-          format: int64
           examples:
             - 12345
     Route:
       type: object
       required:
-        - id
+        - lineId
         - length
         - direction
       properties:
         id:
           type: integer
-          format: int64
+          examples:
+            - 1
+            - 2
+        lineId:
+          type: integer
           examples:
             - 1
             - 2
         length:
           type: integer
-          format: int64
           examples:
             - 5
             - 6
         direction:
           type: integer
-          format: int64
-          enum: [0, 1]
-        stops:
-          type: array
-          items:
-            $ref: '#/components/schemas/Stop'
-        connections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
+          enum: [ 0, 1 ]
+    RouteStop:
+      type: object
+      required:
+        - routeId
+        - stopId
+      properties:
+        routeId:
+          type: integer
+          examples:
+            - 1
+            - 2
+        stopId:
+          type: integer
+          examples:
+            - 1
+            - 2
+        index:
+          type: integer
+          examples:
+            - 5
+            - 6
+        served:
+          type: boolean
+          examples:
+            - true
+            - false
     Line:
       type: object
       required:
-        - id
+        - packetId
         - shortCode
         - fullCode
       properties:
         id:
           type: integer
-          format: int64
+          examples:
+            - 1
+            - 2
+        packetId:
+          type: integer
           examples:
             - 1
             - 2
         shortCode:
           type: integer
-          format: int64
           examples:
             - 204
             - 219
@@ -127,65 +1206,73 @@ components:
           type: string
           examples:
             - 905201
-        routes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Route'
     Packet:
       type: object
       required:
-        - id
         - validFrom
         - validTo
+        - code
       properties:
         id:
           type: integer
-          format: int64
           examples:
             - 1
             - 2
-        validFrom:
+        activeFrom:
+          type: string
+          format: date
+        activeTo:
+          type: string
+          format: date
+        valid:
+          type: boolean
+          examples:
+            - true
+            - false
+        code:
           type: integer
-          format: int64
-        validTo:
-          type: integer
-          format: int64
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/Line'
     Connection:
       type: object
       required:
-        - id
+        - routeId
         - number
       properties:
         id:
           type: integer
-          format: int64
+          examples:
+            - 1
+            - 2
+        routeId:
+          type: integer
           examples:
             - 1
             - 2
         number:
           type: integer
-          format: int64
           examples:
             - 22
             - 25
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rule'
-        departures:
-          type: array
-          items:
-            $ref: '#/components/schemas/Departure'
+    ConnectionRule:
+      type: object
+      required:
+        - connectionId
+        - ruleId
+      properties:
+        connectionId:
+          type: integer
+          examples:
+            - 1
+            - 2
+        ruleId:
+          type: integer
+          examples:
+            - 1
+            - 2
     Rule:
       type: object
       properties:
         id:
           type: integer
-          format: int64
           examples:
             - 1
             - 2
@@ -197,21 +1284,22 @@ components:
     Departure:
       type: object
       required:
-        - id
+        - connectionId
         - time
-        - stop
+        - departure
       properties:
         id:
           type: integer
-          format: int64
+          examples:
+            - 1
+            - 2
+        connectionId:
+          type: integer
           examples:
             - 1
             - 2
         time:
           type: integer
-          format: int64
-        stop:
-          $ref: '#/components/schemas/Stop'
     Error:
       type: object
       required:
@@ -227,3 +1315,140 @@ components:
           type: string
           examples:
             - Something went wrong
+
+  parameters:
+    idParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 20
+    routeIdParam:
+      name: routeId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    packetIdParam:
+      name: packetId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    ruleIdParam:
+      name: ruleId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    connectionIdParam:
+      name: connectionId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    indexParam:
+      name: index
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    afterParam:
+      name: after
+      in: query
+      required: false
+      schema:
+        type: string
+        format: time
+    beforeParam:
+      name: before
+      in: query
+      required: false
+      schema:
+        type: string
+        format: time
+    activeAfterParam:
+      name: activeAfter
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+    activeBeforeParam:
+      name: activeBefore
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+    validParam:
+      name: valid
+      in: query
+      required: false
+      schema:
+        type: boolean
+    lineIdParam:
+      name: lineId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    directionParam:
+      name: direction
+      in: query
+      required: false
+      schema:
+        type: integer
+        enum: [ 0, 1 ]
+    stopIdParam:
+      name: stopId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    servedParam:
+      name: served
+      in: query
+      required: false
+      schema:
+        type: boolean
+  responses:
+    400BadRequest:
+      description: The request was in incorrect format.
+    404NotFound:
+      description: The specified resource was not found.
+    GeneralError:
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

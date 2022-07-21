@@ -1,16 +1,103 @@
 package cz.davidkurzica.service
 
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.selectLineShortCodeByLineId
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.*
+import cz.davidkurzica.util.DatabaseFactory.dbQuery
+import cz.davidkurzica.util.LocalDateTimeSerializer
+import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.*
+import java.time.LocalDateTime
 
 class DepartureService {
+
+    suspend fun getDepartures(
+        offset: Int?,
+        limit: Int?,
+        connectionId: Int?,
+        index: Int?,
+        after: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
+        before: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
+        packetId: Int?,
+    ) = dbQuery {
+        val query = Departures.selectAll()
+            .orderBy(Departures.time)
+
+        query.apply {
+            adjustJoinToPackets()
+
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            connectionId?.let { andWhere { Departures.connectionId eq it } }
+            index?.let { andWhere { Departures.index eq it } }
+            after?.let {
+                andWhere { Departures.time greaterEq it.toLocalTime() }
+                andWhere { Packets.from lessEq it.toLocalDate() }
+            }
+            before?.let {
+                andWhere { Departures.time lessEq it.toLocalTime() }
+                andWhere { Packets.to greaterEq it.toLocalDate() }
+            }
+            packetId?.let {
+                andWhere { Packets.id eq it }
+            }
+        }
+
+        query.mapNotNull { toDeparture(it) }
+    }
+
+    suspend fun getDepartureById(id: Int): Departure? = dbQuery {
+        Departures.select {
+            (Departures.id eq id)
+        }.mapNotNull { toDeparture(it) }
+            .singleOrNull()
+    }
+
+    suspend fun addDeparture(departure: NewDeparture): Departure {
+        var key = 0
+        dbQuery {
+            key = (Departures.insert {
+                it[connectionId] = departure.connectionId
+                it[time] = departure.time
+                it[index] = departure.index
+            } get Departures.id)
+        }
+        return getDepartureById(key)!!
+    }
+
+    suspend fun editDeparture(departure: NewDeparture, id: Int): Departure {
+        dbQuery {
+            Departures.update({ Departures.id eq id }) {
+                it[connectionId] = departure.connectionId
+                it[time] = departure.time
+                it[index] = departure.index
+            }
+        }
+        return getDepartureById(id)!!
+    }
+
+    suspend fun deleteDepartureById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Departures.deleteWhere { Departures.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
+    fun toDeparture(row: ResultRow) =
+        Departure(
+            id = row[Departures.id],
+            connectionId = row[Departures.connectionId],
+            time = row[Departures.time],
+            index = row[Departures.index]
+        )
+
+    private fun Query.adjustJoinToPackets() = run {
+        adjustColumnSet { innerJoin(Connections) }
+        adjustColumnSet { innerJoin(Routes) }
+        adjustColumnSet { innerJoin(Lines) }
+        adjustColumnSet { innerJoin(Packets) }
+    }
+
+    /*
+
     suspend fun get(time: LocalTime, stopId: Int, date: LocalDate) = dbQuery {
         (Departures innerJoin Connections innerJoin Routes innerJoin RouteStops innerJoin Lines innerJoin Packets innerJoin ConnectionRules)
             .slice(Lines.shortCode, Departures.time, Routes.length, Routes.id)
@@ -83,6 +170,7 @@ class DepartureService {
             stopName = getLastStopName(row[Routes.id], row[Routes.length] - 1)
         )
     }
+     */
 }
 
 
