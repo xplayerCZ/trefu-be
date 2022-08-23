@@ -1,8 +1,8 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.ConnectionRule
 import cz.davidkurzica.model.ConnectionRules
-import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
 class ConnectionRuleService {

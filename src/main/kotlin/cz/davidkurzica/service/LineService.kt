@@ -1,10 +1,10 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.Line
 import cz.davidkurzica.model.Lines
 import cz.davidkurzica.model.NewLine
 import cz.davidkurzica.model.Packets
-import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
 class LineService {

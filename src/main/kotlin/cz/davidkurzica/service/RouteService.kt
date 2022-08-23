@@ -1,7 +1,7 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.*
-import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
 class RouteService {

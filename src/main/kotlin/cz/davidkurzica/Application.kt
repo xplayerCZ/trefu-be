@@ -1,7 +1,7 @@
 package cz.davidkurzica
 
-import cz.davidkurzica.service.*
-import cz.davidkurzica.util.DatabaseFactory
+import cz.davidkurzica.db.DatabaseFactory
+import cz.davidkurzica.di.serviceModule
 import cz.davidkurzica.web.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -11,23 +11,10 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.resources.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
-import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
-
-val koinModule = module {
-    single { ConnectionService() }
-    single { ConnectionRuleService() }
-    single { LineService() }
-    single { PacketService() }
-    single { StopService() }
-    single { DepartureService() }
-    single { RouteService() }
-    single { RouteStopService() }
-    single { RuleService() }
-}
 
 fun Application.module() {
     install(CallLogging)
@@ -41,7 +28,7 @@ fun Application.module() {
 
     install(Koin) {
         slf4jLogger()
-        modules(koinModule)
+        modules(serviceModule)
     }
 
     DatabaseFactory.initDatabase(this.environment.config)

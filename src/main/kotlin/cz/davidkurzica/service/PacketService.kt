@@ -1,9 +1,9 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.NewPacket
 import cz.davidkurzica.model.Packet
 import cz.davidkurzica.model.Packets
-import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import cz.davidkurzica.util.LocalDateSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.*

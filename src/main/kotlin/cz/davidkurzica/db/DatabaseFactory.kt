@@ -1,13 +1,11 @@
-package cz.davidkurzica.util
+package cz.davidkurzica.db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.slf4j.LoggerFactory
-import java.sql.Connection.TRANSACTION_REPEATABLE_READ
 import java.util.*
 
 object DatabaseFactory {
@@ -54,7 +52,4 @@ object DatabaseFactory {
         log.info("Flyway db.migration has finished")
     }
 
-    suspend fun <T> dbQuery(
-        block: suspend () -> T,
-    ): T = newSuspendedTransaction(transactionIsolation = TRANSACTION_REPEATABLE_READ) { block() }
 }

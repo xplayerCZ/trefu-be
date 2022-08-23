@@ -1,7 +1,7 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.*
-import cz.davidkurzica.util.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 
 class StopService {
@@ -22,6 +22,7 @@ class StopService {
                 adjustColumnSet { innerJoin(Packets) }
                 andWhere { Packets.id eq it }
             }
+            withDistinct(true)
         }
 
         query.mapNotNull { toStop(it) }

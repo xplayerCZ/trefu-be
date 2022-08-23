@@ -1,9 +1,9 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.Connections
 import cz.davidkurzica.model.RouteStop
 import cz.davidkurzica.model.RouteStops
-import cz.davidkurzica.util.DatabaseFactory
 import org.jetbrains.exposed.sql.*
 
 class RouteStopService {
@@ -15,7 +15,7 @@ class RouteStopService {
         stopId: Int? = null,
         index: Int? = null,
         served: Boolean? = null,
-    ) = DatabaseFactory.dbQuery {
+    ) = dbQuery {
         val query = RouteStops.selectAll()
 
         query.apply {
@@ -30,7 +30,7 @@ class RouteStopService {
     }
 
     suspend fun addRouteStop(routeStop: RouteStop): RouteStop {
-        DatabaseFactory.dbQuery {
+        dbQuery {
             RouteStops.insert {
                 it[routeId] = routeStop.routeId
                 it[stopId] = routeStop.stopId
@@ -47,7 +47,7 @@ class RouteStopService {
 
     suspend fun deleteRouteStop(routeId: Int, stopId: Int, index: Int): Boolean {
         var numOfDeletedItems = 0
-        DatabaseFactory.dbQuery {
+        dbQuery {
             numOfDeletedItems = Connections.deleteWhere {
                 (RouteStops.routeId eq routeId)
                     .and(RouteStops.stopId eq stopId)
