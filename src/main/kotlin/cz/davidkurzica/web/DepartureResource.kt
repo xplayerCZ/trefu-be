@@ -2,7 +2,7 @@ package cz.davidkurzica.web
 
 import cz.davidkurzica.model.NewDeparture
 import cz.davidkurzica.service.DepartureService
-import cz.davidkurzica.util.LocalDateTimeSerializer
+import cz.davidkurzica.util.LocalTimeSerializer
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
@@ -14,7 +14,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Serializable
 @Resource("/departures")
@@ -23,9 +23,11 @@ class Departures(
     val limit: Int? = null,
     val connectionId: Int? = null,
     val index: Int? = null,
-    val after: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
-    val before: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime? = null,
+    val after: @Serializable(with = LocalTimeSerializer::class) LocalTime? = null,
+    val before: @Serializable(with = LocalTimeSerializer::class) LocalTime? = null,
     val packetId: Int? = null,
+    val stopId: Int? = null,
+    val ruleId: Int? = null,
 )
 
 @Serializable
@@ -45,7 +47,9 @@ fun Route.departure() {
                 index = it.index,
                 after = it.after,
                 before = it.before,
-                packetId = it.packetId
+                packetId = it.packetId,
+                stopId = it.stopId,
+                ruleId = it.ruleId,
             )
         )
     }

@@ -2,6 +2,7 @@ package cz.davidkurzica.web
 
 import cz.davidkurzica.model.NewRule
 import cz.davidkurzica.service.RuleService
+import cz.davidkurzica.util.LocalDateSerializer
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
@@ -13,12 +14,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
+import java.time.LocalDate
 
 @Serializable
 @Resource("/rules")
 class Rules(
     val offset: Int? = null,
     val limit: Int? = null,
+    val date: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
 )
 
 @Serializable
@@ -33,7 +36,8 @@ fun Route.rule() {
         call.respond(
             ruleService.getRules(
                 offset = it.offset,
-                limit = it.limit
+                limit = it.limit,
+                date = it.date,
             )
         )
     }

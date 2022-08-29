@@ -2,10 +2,8 @@ package cz.davidkurzica.service
 
 import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.*
-import cz.davidkurzica.util.LocalDateTimeSerializer
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.*
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 class DepartureService {
 
@@ -14,9 +12,11 @@ class DepartureService {
         limit: Int?,
         connectionId: Int?,
         index: Int?,
-        after: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
-        before: @Serializable(with = LocalDateTimeSerializer::class) LocalDateTime?,
+        after: LocalTime?,
+        before: LocalTime?,
         packetId: Int?,
+        stopId: Int?,
+        ruleId: Int?,
     ) = dbQuery {
         val query = Departures.selectAll()
             .orderBy(Departures.time)
@@ -28,15 +28,22 @@ class DepartureService {
             connectionId?.let { andWhere { Departures.connectionId eq it } }
             index?.let { andWhere { Departures.index eq it } }
             after?.let {
-                andWhere { Departures.time greaterEq it.toLocalTime() }
-                andWhere { Packets.from lessEq it.toLocalDate() }
+                andWhere { Departures.time greaterEq it }
             }
             before?.let {
-                andWhere { Departures.time lessEq it.toLocalTime() }
-                andWhere { Packets.to greaterEq it.toLocalDate() }
+                andWhere { Departures.time lessEq it }
             }
             packetId?.let {
                 andWhere { Packets.id eq it }
+            }
+            stopId?.let {
+                adjustJoinToStops()
+                andWhere { RouteStops.stopId eq it }
+                andWhere { RouteStops.index eq Departures.index }
+            }
+            ruleId?.let {
+                adjustJoinToRules()
+                andWhere { ConnectionRules.ruleId eq it }
             }
         }
 
@@ -96,6 +103,14 @@ class DepartureService {
         adjustColumnSet { innerJoin(Packets) }
     }
 
+    private fun Query.adjustJoinToStops() = run {
+        adjustColumnSet { innerJoin(RouteStops) }
+    }
+
+    private fun Query.adjustJoinToRules() = run {
+        adjustColumnSet { innerJoin(ConnectionRules) }
+    }
+
     /*
 
     suspend fun get(time: LocalTime, stopId: Int, date: LocalDate) = dbQuery {
@@ -113,14 +128,6 @@ class DepartureService {
             .orderBy(Departures.time)
             .limit(10)
             .map { toDepartureItem(it) }
-    }
-
-    private fun getRule(date: LocalDate): Int {
-        return when(date.dayOfWeek.value) {
-            Calendar.SATURDAY -> 2
-            Calendar.SUNDAY -> 3
-            else -> 1
-        }
     }
 
     suspend fun getTimetable(stopId: Int, lineId: Int, directionId: Int, date: LocalDate) = dbQuery {

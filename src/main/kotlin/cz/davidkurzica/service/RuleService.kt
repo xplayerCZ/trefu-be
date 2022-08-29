@@ -5,17 +5,22 @@ import cz.davidkurzica.model.NewRule
 import cz.davidkurzica.model.Rule
 import cz.davidkurzica.model.Rules
 import org.jetbrains.exposed.sql.*
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Month
 
 class RuleService {
 
     suspend fun getRules(
         offset: Int?,
         limit: Int?,
+        date: LocalDate?,
     ) = dbQuery {
         val query = Rules.selectAll()
 
         query.apply {
             limit?.let { limit(it, (offset ?: 0).toLong()) }
+            date?.let { andWhere { Rules.id eq getRule(it) } }
         }
 
         query.mapNotNull { toRule(it) }
@@ -60,4 +65,15 @@ class RuleService {
             id = row[Rules.id],
             description = row[Rules.description],
         )
+
+    private fun getRule(date: LocalDate): Int {
+        return when (date.dayOfWeek) {
+            DayOfWeek.SATURDAY -> 2
+            DayOfWeek.SUNDAY -> 3
+            else -> when (date.month) {
+                Month.JULY, Month.AUGUST -> 4
+                else -> 1
+            }
+        }
+    }
 }
