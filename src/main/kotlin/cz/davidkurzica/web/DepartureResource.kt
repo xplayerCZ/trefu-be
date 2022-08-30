@@ -28,6 +28,8 @@ class Departures(
     val packetId: Int? = null,
     val stopId: Int? = null,
     val ruleId: Int? = null,
+    val routeId: Int? = null,
+    val lineId: Int? = null,
 )
 
 @Serializable
@@ -50,6 +52,8 @@ fun Route.departure() {
                 packetId = it.packetId,
                 stopId = it.stopId,
                 ruleId = it.ruleId,
+                routeId = it.routeId,
+                lineId = it.lineId
             )
         )
     }

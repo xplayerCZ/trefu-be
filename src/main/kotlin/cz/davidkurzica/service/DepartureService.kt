@@ -16,6 +16,8 @@ class DepartureService {
         before: LocalTime?,
         packetId: Int?,
         stopId: Int?,
+        lineId: Int?,
+        routeId: Int?,
         ruleId: Int?,
     ) = dbQuery {
         val query = Departures.selectAll()
@@ -35,6 +37,12 @@ class DepartureService {
             }
             packetId?.let {
                 andWhere { Packets.id eq it }
+            }
+            lineId?.let {
+                andWhere { Lines.id eq it }
+            }
+            routeId?.let {
+                andWhere { Routes.id eq it }
             }
             stopId?.let {
                 adjustJoinToStops()
