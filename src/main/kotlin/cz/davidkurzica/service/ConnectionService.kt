@@ -1,15 +1,34 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.toConnection
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 
 class ConnectionService {
 
-    suspend fun getConnection(id: Int): Connection? = dbQuery {
+    suspend fun getConnections(
+        offset: Int?,
+        limit: Int?,
+        routeId: Int?,
+        packetId: Int?,
+    ) = dbQuery {
+        val query = Connections.selectAll()
+
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            routeId?.let { andWhere { Connections.routeId eq it } }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Routes) }
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
+        }
+
+        query.mapNotNull { toConnection(it) }
+    }
+
+    suspend fun getConnectionById(id: Int): Connection? = dbQuery {
         Connections.select {
             (Connections.id eq id)
         }.mapNotNull { toConnection(it) }
@@ -24,23 +43,31 @@ class ConnectionService {
                 it[number] = connection.number
             } get Connections.id)
         }
-        dbQuery {
-            connection.departureTimes.forEachIndexed { _index, departureTime ->
-                Departures.insert {
-                    it[connectionId] = key
-                    it[time] = departureTime
-                    it[index] = _index
-                }
-            }
-        }
-        dbQuery {
-            connection.ruleIds.forEach { _ruleId ->
-                ConnectionRules.insert {
-                    it[connectionId] = key
-                    it[ruleId] = _ruleId
-                }
-            }
-        }
-        return getConnection(key)!!
+        return getConnectionById(key)!!
     }
+
+    suspend fun editConnection(connection: NewConnection, id: Int): Connection {
+        dbQuery {
+            Connections.update({ Connections.id eq id }) {
+                it[routeId] = connection.routeId
+                it[number] = connection.number
+            }
+        }
+        return getConnectionById(id)!!
+    }
+
+    suspend fun deleteConnectionById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Connections.deleteWhere { Connections.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
+    fun toConnection(row: ResultRow) =
+        Connection(
+            id = row[Connections.id],
+            routeId = row[Connections.routeId],
+            number = row[Connections.number]
+        )
 }

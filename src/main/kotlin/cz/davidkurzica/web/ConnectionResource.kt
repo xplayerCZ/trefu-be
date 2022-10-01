@@ -1,87 +1,103 @@
 package cz.davidkurzica.web
 
-import cz.davidkurzica.model.ConnectionItem
-import cz.davidkurzica.model.ConnectionItemPart
-import cz.davidkurzica.model.DepartureSimple
 import cz.davidkurzica.model.NewConnection
 import cz.davidkurzica.service.ConnectionService
 import io.ktor.http.*
+import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.post
+import io.ktor.server.resources.put
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 import org.koin.ktor.ext.inject
-import java.time.LocalTime
+
+@Serializable
+@Resource("/connections")
+class Connections(
+    val offset: Int? = null,
+    val limit: Int? = null,
+    val routeId: Int? = null,
+    val packetId: Int? = null,
+)
+
+@Serializable
+@Resource("/connections/{id}")
+class ConnectionById(val id: Int) {
+
+    @Serializable
+    @Resource("/departures")
+    class Departures(val parent: ConnectionById, val offset: Int? = null, val limit: Int? = null)
+
+    @Serializable
+    @Resource("/rules")
+    class Rules(val parent: ConnectionById, val offset: Int? = null, val limit: Int? = null)
+}
 
 fun Route.connection() {
 
     val connectionService: ConnectionService by inject()
 
-    route("/connection") {
-
-        get("/item") {
-            val mockup = listOf(
-                ConnectionItem(
-                    listOf(
-                        ConnectionItemPart(
-                            lineShortCode = "209",
-                            from = DepartureSimple(
-                                LocalTime.of(15, 35),
-                                "Horovo náměstí"
-                            ),
-                            to = DepartureSimple(
-                                LocalTime.of(15, 40),
-                                "Divadlo"
-                            )
-                        ),
-                        ConnectionItemPart(
-                            lineShortCode = "206",
-                            from = DepartureSimple(
-                                LocalTime.of(15, 40),
-                                "Divadlo"
-                            ),
-                            to = DepartureSimple(
-                                LocalTime.of(15, 43),
-                                "Praskova"
-                            )
-                        ),
-                        ConnectionItemPart(
-                            lineShortCode = "219",
-                            from = DepartureSimple(
-                                LocalTime.of(15, 44),
-                                "Praskova"
-                            ),
-                            to = DepartureSimple(
-                                LocalTime.of(15, 48),
-                                "Švédská kaple"
-                            )
-                        )
-                    )
-                ),
-                ConnectionItem(
-                    listOf(
-                        ConnectionItemPart(
-                            lineShortCode = "208",
-                            from = DepartureSimple(
-                                LocalTime.of(15, 48),
-                                "Horovo náměstí"
-                            ),
-                            to = DepartureSimple(
-                                LocalTime.of(16, 0),
-                                "Švédská kaple"
-                            )
-                        )
-                    ),
-                )
+    get<Connections> {
+        call.respond(
+            connectionService.getConnections(
+                offset = it.offset,
+                limit = it.limit,
+                routeId = it.routeId,
+                packetId = it.packetId,
             )
+        )
+    }
 
-
-            call.respond(HttpStatusCode.OK, mockup)
-        }
-
-        post {
+    post<Connections> {
+        try {
             val connection = call.receive<NewConnection>()
-            call.respond(HttpStatusCode.Created, connectionService.addConnection(connection))
+            call.respond(
+                message = connectionService.addConnection(connection),
+                status = HttpStatusCode.Created
+            )
+        } catch (e: ContentTransformationException) {
+            call.respondText("Connection is in wrong format", status = HttpStatusCode.BadRequest)
         }
+    }
+
+    get<ConnectionById> {
+        val connection =
+            connectionService.getConnectionById(it.id) ?: return@get call.respondText(
+                "No connection with id ${it.id}",
+                status = HttpStatusCode.NotFound
+            )
+        call.respond(connection)
+    }
+
+    put<ConnectionById> {
+        try {
+            val connection = call.receive<NewConnection>()
+            connectionService.editConnection(connection, it.id)
+            call.respondText("Connection with id ${it.id} updated correctly", status = HttpStatusCode.OK)
+        } catch (e: ContentTransformationException) {
+            call.respondText("Connection is in wrong format", status = HttpStatusCode.BadRequest)
+        }
+    }
+
+    delete<ConnectionById> {
+        if (connectionService.deleteConnectionById(it.id)) {
+            call.respondText("Connection with id ${it.id} deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText(
+                "Failed to delete Connection with id ${it.id}",
+                status = HttpStatusCode.InternalServerError
+            )
+        }
+    }
+
+    get<ConnectionById.Departures> {
+        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+    }
+
+    get<ConnectionById.Rules> {
+        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
     }
 }

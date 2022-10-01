@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object Stops : Table() {
-    val id = integer("stop_id")
+    val id = integer("stop_id").autoIncrement()
     val name = text("name")
     val latitude = text("latitude")
     val longitude = text("longitude")
@@ -14,21 +14,20 @@ object Stops : Table() {
 }
 
 @Serializable
-class NewStop(
-    val id: Int,
-    val name: String,
-    val latitude: String,
-    val longitude: String,
-    val code: Int
-)
-
-@Serializable
 class Stop(
     val id: Int,
     val name: String,
     val latitude: String,
     val longitude: String,
-    val code: Int
+    val code: Int,
+)
+
+@Serializable
+class NewStop(
+    val name: String,
+    val latitude: String,
+    val longitude: String,
+    val code: Int,
 )
 
 @Serializable

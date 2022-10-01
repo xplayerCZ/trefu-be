@@ -1,57 +1,91 @@
 package cz.davidkurzica.service
 
+import cz.davidkurzica.db.dbQuery
 import cz.davidkurzica.model.*
-import cz.davidkurzica.service.DatabaseFactory.dbQuery
-import cz.davidkurzica.util.selectStopsByRouteId
-import cz.davidkurzica.util.toRoute
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 
 class RouteService {
 
-    suspend fun getRoute(id: Int): Route? = dbQuery {
+    suspend fun getRoutes(
+        offset: Int?,
+        limit: Int?,
+        lineId: Int?,
+        packetId: Int?,
+    ) = dbQuery {
+        val query = Routes.selectAll()
+
+        query.apply {
+            limit?.let { limit(it, (offset ?: 0).toLong()) }
+            lineId?.let { andWhere { Routes.lineId eq it } }
+            packetId?.let {
+                adjustColumnSet { innerJoin(Lines) }
+                adjustColumnSet { innerJoin(Packets) }
+                andWhere { Packets.id eq it }
+            }
+        }
+
+        query.mapNotNull { toRoute(it) }
+    }
+
+    suspend fun getRouteById(id: Int): Route? = dbQuery {
         Routes.select {
             (Routes.id eq id)
         }.mapNotNull { toRoute(it) }
             .singleOrNull()
     }
 
-    suspend fun getDirections(lineId: Int) = dbQuery {
-        (Routes innerJoin Lines)
-            .slice(Routes.id, Routes.direction)
-            .select {
-            (Lines.id eq lineId)
-        }.mapNotNull { toDirection(it) }
-    }
-
     suspend fun addRoute(route: NewRoute): Route {
         var key = 0
         dbQuery {
             key = (Routes.insert {
-                it[length] = route.stopIds.size
-                it[direction] = route.direction
-                it[lineId] =  route.lineId
+                it[lineId] = route.lineId
+                it[length] = route.length
             } get Routes.id)
         }
-        dbQuery {
-            route.stopIds.forEachIndexed { _index, _stopId ->
-                RouteStops.insert {
-                    it[stopId] = _stopId
-                    it[routeId] = key
-                    it[served] = route.servedStopsIds.contains(_stopId)
-                    it[index] = _index
-                }
-            }
-        }
-        return getRoute(key)!!
+        return getRouteById(key)!!
     }
 
-    fun toDirection(row: ResultRow): Direction {
-        val stops = selectStopsByRouteId(row[Routes.id])
-        return Direction(
-            id = row[Routes.direction],
-            description = "${stops.first().name} - ${stops.last().name}"
-        )
+    suspend fun editRoute(route: NewRoute, id: Int): Route {
+        dbQuery {
+            Routes.update({ Routes.id eq id }) {
+                it[lineId] = route.lineId
+                it[length] = route.length
+            }
+        }
+        return getRouteById(id)!!
     }
+
+    suspend fun deleteRouteById(id: Int): Boolean {
+        var numOfDeletedItems = 0
+        dbQuery {
+            numOfDeletedItems = Routes.deleteWhere { Routes.id eq id }
+        }
+        return numOfDeletedItems == 1
+    }
+
+    fun toRoute(row: ResultRow): Route =
+        Route(
+            id = row[Routes.id],
+            lineId = row[Routes.lineId],
+            length = row[Routes.length],
+        )
+
+
+    /*
+private fun toDirection(row: ResultRow): Direction {
+    val stops = selectStopsByRouteId(row[Routes.id])
+    return Direction(
+        id = row[Routes.direction],
+        description = "${stops.first().name} - ${stops.last().name}"
+    )
+}
+
+suspend fun getDirections(lineId: Int) = dbQuery {
+    (Routes innerJoin Lines)
+        .slice(Routes.id, Routes.direction)
+        .select {
+        (Lines.id eq lineId)
+    }.mapNotNull { toDirection(it) }
+}
+ */
 }
