@@ -2,10 +2,7 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: [ master ]
-
-  pull_request:
-    branches: [ master ]
+    branches: [ master, develop ]
 
   workflow_dispatch:
 
