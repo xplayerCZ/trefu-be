@@ -94,7 +94,7 @@ suspend fun getDetails(stopId: Int, date: LocalDate) = dbQuery {
                 .and (Packets.to greaterEq date)
         }
         .map { toLineItem(it) }
-        .distinctBy { it.shortCode }
+        .distinctBy { it.shortCode } // !! wrong function
 }
 
  */
