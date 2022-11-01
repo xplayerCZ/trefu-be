@@ -1,5 +1,6 @@
 package cz.davidkurzica.model
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
 object GraphNodes : Table("graph_nodes") {
@@ -9,3 +10,16 @@ object GraphNodes : Table("graph_nodes") {
 
     override val primaryKey = PrimaryKey(id, name = "PK_GraphNodes")
 }
+
+@Serializable
+data class GraphNode(
+    val id: Int,
+    val stopId: Int,
+    val graphId: Int,
+)
+
+@Serializable
+data class NewGraphNode(
+    val stopId: Int,
+    val graphId: Int,
+)

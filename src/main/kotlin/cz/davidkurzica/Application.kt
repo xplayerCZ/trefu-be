@@ -19,4 +19,3 @@ fun Application.module() {
 
     DatabaseFactory.initDatabase(this.environment.config)
 }
-
