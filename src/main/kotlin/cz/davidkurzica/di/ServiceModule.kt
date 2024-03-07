@@ -13,7 +13,4 @@ val serviceModule = module {
     single { RouteService() }
     single { RouteStopService() }
     single { RuleService() }
-    single { GraphService() }
-    single { GraphNodeService() }
-    single { GraphEdgeService() }
 }

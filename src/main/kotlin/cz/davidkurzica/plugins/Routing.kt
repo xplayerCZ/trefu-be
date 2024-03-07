@@ -14,8 +14,5 @@ fun Application.configureRouting() {
         route()
         routeStop()
         rule()
-        graph()
-        graphNode()
-        graphEdge()
     }
 }

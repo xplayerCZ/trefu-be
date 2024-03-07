@@ -25,7 +25,6 @@ object DatabaseFactory {
         log.info("Initialising database")
         val pool = createHikariDataSource(loadConfigProperties(config))
         Database.connect(pool)
-        runFlyway(pool)
     }
 
     private fun createHikariDataSource(
@@ -37,19 +36,4 @@ object DatabaseFactory {
         transactionIsolation = "TRANSACTION_REPEATABLE_READ"
         validate()
     })
-
-    private fun runFlyway(datasource: HikariDataSource) {
-        val flyway = Flyway.configure()
-            .dataSource(datasource)
-            .load()
-        try {
-            flyway.info()
-            flyway.migrate()
-        } catch (e: Exception) {
-            log.error("Exception running flyway db.migration", e)
-            throw e
-        }
-        log.info("Flyway db.migration has finished")
-    }
-
 }
