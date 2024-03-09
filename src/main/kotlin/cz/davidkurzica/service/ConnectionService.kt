@@ -25,13 +25,13 @@ class ConnectionService {
             }
         }
 
-        query.mapNotNull { toConnection(it) }
+        query.mapNotNull { it.toConnection() }
     }
 
     suspend fun getConnectionById(id: Int): Connection? = dbQuery {
         Connections.select {
             (Connections.id eq id)
-        }.mapNotNull { toConnection(it) }
+        }.mapNotNull { it.toConnection() }
             .singleOrNull()
     }
 
@@ -64,10 +64,10 @@ class ConnectionService {
         return numOfDeletedItems == 1
     }
 
-    fun toConnection(row: ResultRow) =
+    private fun ResultRow.toConnection() =
         Connection(
-            id = row[Connections.id],
-            routeId = row[Connections.routeId],
-            number = row[Connections.number]
+            id = this[Connections.id],
+            routeId = this[Connections.routeId],
+            number = this[Connections.number]
         )
 }

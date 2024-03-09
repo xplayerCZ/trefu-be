@@ -25,13 +25,13 @@ class StopService {
             withDistinct(true)
         }
 
-        query.mapNotNull { toStop(it) }
+        query.mapNotNull { it.toStop() }
     }
 
     suspend fun getStopById(id: Int): Stop? = dbQuery {
-        Stops.select {
-            (Stops.id eq id)
-        }.mapNotNull { toStop(it) }
+        Stops
+            .select { (Stops.id eq id) }
+            .mapNotNull { it.toStop() }
             .singleOrNull()
     }
 
@@ -68,13 +68,13 @@ class StopService {
         return numOfDeletedItems == 1
     }
 
-    private fun toStop(row: ResultRow): Stop =
+    private fun ResultRow.toStop(): Stop =
         Stop(
-            id = row[Stops.id],
-            name = row[Stops.name],
-            latitude = row[Stops.latitude],
-            longitude = row[Stops.longitude],
-            code = row[Stops.code]
+            id = this[Stops.id],
+            name = this[Stops.name],
+            latitude = this[Stops.latitude],
+            longitude = this[Stops.longitude],
+            code = this[Stops.code]
         )
 
     /*

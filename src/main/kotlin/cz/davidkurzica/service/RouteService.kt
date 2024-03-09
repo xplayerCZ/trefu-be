@@ -24,13 +24,13 @@ class RouteService {
             }
         }
 
-        query.mapNotNull { toRoute(it) }
+        query.mapNotNull { it.toRoute() }
     }
 
     suspend fun getRouteById(id: Int): Route? = dbQuery {
         Routes.select {
             (Routes.id eq id)
-        }.mapNotNull { toRoute(it) }
+        }.mapNotNull { it.toRoute() }
             .singleOrNull()
     }
 
@@ -63,11 +63,11 @@ class RouteService {
         return numOfDeletedItems == 1
     }
 
-    fun toRoute(row: ResultRow): Route =
+    private fun ResultRow.toRoute(): Route =
         Route(
-            id = row[Routes.id],
-            lineId = row[Routes.lineId],
-            length = row[Routes.length],
+            id = this[Routes.id],
+            lineId = this[Routes.lineId],
+            length = this[Routes.length],
         )
 
 

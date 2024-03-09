@@ -20,16 +20,16 @@ class RuleService {
 
         query.apply {
             limit?.let { limit(it, (offset ?: 0).toLong()) }
-            date?.let { andWhere { Rules.id eq getRule(it) } }
+            date?.let { andWhere { Rules.id eq it.toRuleId() } }
         }
 
-        query.mapNotNull { toRule(it) }
+        query.mapNotNull { it.toRule() }
     }
 
     suspend fun getRuleById(id: Int): Rule? = dbQuery {
-        Rules.select {
-            (Rules.id eq id)
-        }.mapNotNull { toRule(it) }
+        Rules
+            .select { (Rules.id eq id) }
+            .mapNotNull { it.toRule() }
             .singleOrNull()
     }
 
@@ -60,20 +60,18 @@ class RuleService {
         return numOfDeletedItems == 1
     }
 
-    fun toRule(row: ResultRow): Rule =
+    private fun ResultRow.toRule(): Rule =
         Rule(
-            id = row[Rules.id],
-            description = row[Rules.description],
+            id = this[Rules.id],
+            description = this[Rules.description],
         )
 
-    private fun getRule(date: LocalDate): Int {
-        return when (date.dayOfWeek) {
-            DayOfWeek.SATURDAY -> 2
-            DayOfWeek.SUNDAY -> 3
-            else -> when (date.month) {
-                Month.JULY, Month.AUGUST -> 4
-                else -> 1
-            }
+    private fun LocalDate.toRuleId() = when (this.dayOfWeek) {
+        DayOfWeek.SATURDAY -> 2
+        DayOfWeek.SUNDAY -> 3
+        else -> when (this.month) {
+            Month.JULY, Month.AUGUST -> 4
+            else -> 1
         }
     }
 }

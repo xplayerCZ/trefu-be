@@ -55,13 +55,13 @@ class DepartureService {
             }
         }
 
-        query.mapNotNull { toDeparture(it) }
+        query.mapNotNull { it.toDeparture() }
     }
 
     suspend fun getDepartureById(id: Int): Departure? = dbQuery {
         Departures.select {
             (Departures.id eq id)
-        }.mapNotNull { toDeparture(it) }
+        }.mapNotNull { it.toDeparture() }
             .singleOrNull()
     }
 
@@ -96,14 +96,6 @@ class DepartureService {
         return numOfDeletedItems == 1
     }
 
-    fun toDeparture(row: ResultRow) =
-        Departure(
-            id = row[Departures.id],
-            connectionId = row[Departures.connectionId],
-            time = row[Departures.time],
-            index = row[Departures.index]
-        )
-
     private fun Query.adjustJoinToPackets() = run {
         adjustColumnSet { innerJoin(Connections) }
         adjustColumnSet { innerJoin(Routes) }
@@ -118,6 +110,15 @@ class DepartureService {
     private fun Query.adjustJoinToRules() = run {
         adjustColumnSet { innerJoin(ConnectionRules) }
     }
+
+
+    private fun ResultRow.toDeparture() =
+        Departure(
+            id = this[Departures.id],
+            connectionId = this[Departures.connectionId],
+            time = this[Departures.time],
+            index = this[Departures.index]
+        )
 
     /*
 

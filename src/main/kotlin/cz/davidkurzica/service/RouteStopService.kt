@@ -26,7 +26,7 @@ class RouteStopService {
             served?.let { andWhere { RouteStops.served eq it } }
         }
 
-        query.mapNotNull { toRouteStop(it) }
+        query.mapNotNull { it.toRouteStop() }
     }
 
     suspend fun addRouteStop(routeStop: RouteStop): RouteStop {
@@ -57,11 +57,11 @@ class RouteStopService {
         return numOfDeletedItems == 1
     }
 
-    fun toRouteStop(row: ResultRow) =
+    private fun ResultRow.toRouteStop() =
         RouteStop(
-            routeId = row[RouteStops.routeId],
-            stopId = row[RouteStops.stopId],
-            index = row[RouteStops.index],
-            served = row[RouteStops.served]
+            routeId = this[RouteStops.routeId],
+            stopId = this[RouteStops.stopId],
+            index = this[RouteStops.index],
+            served = this[RouteStops.served]
         )
 }

@@ -24,13 +24,13 @@ class LineService {
             }
         }
 
-        query.mapNotNull { toLine(it) }
+        query.mapNotNull { it.toLine() }
     }
 
     suspend fun getLineById(id: Int): Line? = dbQuery {
         Lines.select {
             (Lines.id eq id)
-        }.mapNotNull { toLine(it) }
+        }.mapNotNull { it.toLine() }
             .singleOrNull()
     }
 
@@ -66,12 +66,12 @@ class LineService {
         return numOfDeletedItems == 1
     }
 
-    private fun toLine(row: ResultRow): Line =
+    private fun ResultRow.toLine(): Line =
         Line(
-            id = row[Lines.id],
-            shortCode = row[Lines.shortCode],
-            fullCode = row[Lines.fullCode],
-            packetId = row[Lines.packetId]
+            id = this[Lines.id],
+            shortCode = this[Lines.shortCode],
+            fullCode = this[Lines.fullCode],
+            packetId = this[Lines.packetId]
         )
 
     /*

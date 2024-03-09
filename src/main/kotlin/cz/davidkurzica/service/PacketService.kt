@@ -27,13 +27,13 @@ class PacketService {
             valid?.let { andWhere { Packets.valid eq it } }
         }
 
-        query.mapNotNull { toPacket(it) }
+        query.mapNotNull { it.toPacket() }
     }
 
     suspend fun getPacketById(id: Int): Packet? = dbQuery {
         Packets.select {
             (Packets.id eq id)
-        }.mapNotNull { toPacket(it) }
+        }.mapNotNull { it.toPacket() }
             .singleOrNull()
     }
 
@@ -70,12 +70,12 @@ class PacketService {
         return numOfDeletedItems == 1
     }
 
-    fun toPacket(row: ResultRow): Packet =
+    private fun ResultRow.toPacket(): Packet =
         Packet(
-            id = row[Packets.id],
-            from = row[Packets.from],
-            to = row[Packets.to],
-            valid = row[Packets.valid],
-            code = row[Packets.code]
+            id = this[Packets.id],
+            from = this[Packets.from],
+            to = this[Packets.to],
+            valid = this[Packets.valid],
+            code = this[Packets.code]
         )
 }

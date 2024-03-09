@@ -21,7 +21,7 @@ class ConnectionRuleService {
             ruleId?.let { andWhere { ConnectionRules.ruleId eq it } }
         }
 
-        query.mapNotNull { toConnectionRule(it) }
+        query.mapNotNull { it.toConnectionRule() }
     }
 
     suspend fun addConnectionRule(connectionRule: ConnectionRule): ConnectionRule {
@@ -48,9 +48,9 @@ class ConnectionRuleService {
         return numOfDeletedItems == 1
     }
 
-    fun toConnectionRule(row: ResultRow) =
+    private fun ResultRow.toConnectionRule() =
         ConnectionRule(
-            connectionId = row[ConnectionRules.connectionId],
-            ruleId = row[ConnectionRules.ruleId]
+            connectionId = this[ConnectionRules.connectionId],
+            ruleId = this[ConnectionRules.ruleId]
         )
 }
