@@ -70,8 +70,8 @@ class PacketService {
     private fun ResultRow.toPacket(): Packet =
         Packet(
             id = this[Packets.id],
-            from = this[Packets.from],
-            to = this[Packets.to],
+            activeFrom = this[Packets.from],
+            activeTo = this[Packets.to],
             valid = this[Packets.valid],
             code = this[Packets.code]
         )
