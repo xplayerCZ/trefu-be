@@ -1,6 +1,14 @@
 package db.migration
 
-import cz.davidkurzica.model.*
+import cz.davidkurzica.domain.connection.Connections
+import cz.davidkurzica.domain.connectionrule.ConnectionRules
+import cz.davidkurzica.domain.departure.Departures
+import cz.davidkurzica.domain.line.Lines
+import cz.davidkurzica.domain.packet.Packets
+import cz.davidkurzica.domain.route.Routes
+import cz.davidkurzica.domain.routestop.RouteStops
+import cz.davidkurzica.domain.rule.Rules
+import cz.davidkurzica.domain.stop.Stops
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils
