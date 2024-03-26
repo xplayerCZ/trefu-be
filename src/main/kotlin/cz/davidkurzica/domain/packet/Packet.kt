@@ -19,8 +19,8 @@ object Packets : Table() {
 @Serializable
 class Packet(
     val id: Int,
-    val activeFrom: @Serializable(with = LocalDateSerializer::class) LocalDate,
-    val activeTo: @Serializable(with = LocalDateSerializer::class) LocalDate,
+    val from: @Serializable(with = LocalDateSerializer::class) LocalDate,
+    val to: @Serializable(with = LocalDateSerializer::class) LocalDate,
     val valid: Boolean,
     val code: Int,
 )

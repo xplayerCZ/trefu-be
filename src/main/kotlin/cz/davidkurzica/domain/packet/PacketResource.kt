@@ -19,8 +19,8 @@ import java.time.LocalDate
 class PacketsEndpoint(
     val offset: Int? = null,
     val limit: Int? = null,
-    val activeAfter: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
-    val activeBefore: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+    val after: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+    val before: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
     val valid: Boolean? = null,
 )
 
@@ -42,8 +42,8 @@ fun Route.packet() {
             packetService.getPackets(
                 offset = it.offset,
                 limit = it.limit,
-                activeAfter = it.activeAfter,
-                activeBefore = it.activeBefore,
+                after = it.after,
+                before = it.before,
                 valid = it.valid,
             )
         )

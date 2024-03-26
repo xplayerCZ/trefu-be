@@ -11,16 +11,16 @@ class PacketService {
     suspend fun getPackets(
         offset: Int?,
         limit: Int?,
-        activeAfter: @Serializable(with = LocalDateSerializer::class) LocalDate?,
-        activeBefore: @Serializable(with = LocalDateSerializer::class) LocalDate?,
+        after: @Serializable(with = LocalDateSerializer::class) LocalDate?,
+        before: @Serializable(with = LocalDateSerializer::class) LocalDate?,
         valid: Boolean?,
     ) = dbQuery {
         val query = Packets.selectAll()
 
         query.apply {
             limit?.let { limit(it, (offset ?: 0).toLong()) }
-            activeAfter?.let { andWhere { (Packets.from greaterEq it) or (Packets.to greaterEq it) } }
-            activeBefore?.let { andWhere { (Packets.from lessEq it) or (Packets.to lessEq it) } }
+            after?.let { andWhere { (Packets.from greaterEq it) or (Packets.to greaterEq it) } }
+            before?.let { andWhere { (Packets.from lessEq it) or (Packets.to lessEq it) } }
             valid?.let { andWhere { Packets.valid eq it } }
         }
 
@@ -70,8 +70,8 @@ class PacketService {
     private fun ResultRow.toPacket(): Packet =
         Packet(
             id = this[Packets.id],
-            activeFrom = this[Packets.from],
-            activeTo = this[Packets.to],
+            from = this[Packets.from],
+            to = this[Packets.to],
             valid = this[Packets.valid],
             code = this[Packets.code]
         )
